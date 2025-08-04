@@ -1,0 +1,148 @@
+{
+  "target_url": "http://testphp.vulnweb.com/",
+  "timestamp": "2025-07-26T17:29:25.675596",
+  "findings": [],
+  "vulnerabilities": [],
+  "ai_summaries": [
+    {
+      "success": true,
+      "analysis": "The provided content is a security report that is currently empty, indicated by empty lists for 'findings' and 'vulnerabilities'. The target URL is http://testphp.vulnweb.com/. This website is intentionally vulnerable, designed for security testing and education.  Given the nature of the target website, the *potential* vulnerabilities are high, but the report's current assessment doesn't reflect any identified issues, only the possibility of them. Therefore, a base risk score is assigned acknowledging the target's vulnerability, while the empty findings impact confidence. Further analysis of the target URL itself is *required* to populate the findings and vulnerabilities lists for a truly meaningful assessment. Without evidence of exploitable issues, the risk level remains moderate, based on the website's design purpose. The identified entity is the base URL itself.",
+      "risk_score": 5,
+      "recommendations": [
+        "Perform thorough vulnerability scanning of http://testphp.vulnweb.com/ using tools like OWASP ZAP, Burp Suite, or Nikto.",
+        "Manually test for common web vulnerabilities such as SQL Injection, Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF), Local File Inclusion (LFI), Remote File Inclusion (RFI), and command injection.",
+        "Analyze the application's code (if available) for potential vulnerabilities and insecure coding practices.",
+        "Implement proper input validation and output encoding to prevent XSS and SQL Injection attacks.",
+        "Implement strong authentication and authorization mechanisms.",
+        "Regularly update the website's software and dependencies to patch security vulnerabilities.",
+        "Configure a Web Application Firewall (WAF) to protect against common web attacks."
+      ],
+      "entities": [
+        "http://testphp.vulnweb.com/"
+      ],
+      "vulnerabilities": [
+        "Potential SQL Injection",
+        "Potential XSS",
+        "Potential CSRF",
+        "Potential LFI",
+        "Potential RFI",
+        "Potential Command Injection"
+      ],
+      "confidence": 0.8,
+      "model_used": "gemini-2.0-flash",
+      "processing_time": 4.466370344161987,
+      "error_message": null
+    }
+  ],
+  "config": {
+    "ai": {
+      "model": "gemini-2.0-flash",
+      "api_key_env": "GOOGLE_API_KEY",
+      "max_retries": 3,
+      "timeout": 30,
+      "context_window": 2000
+    },
+    "browser": {
+      "headless": false,
+      "stealth_mode": true,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "window_size": "1920x1080",
+      "page_load_timeout": 30,
+      "implicit_wait": 10,
+      "chrome_options": [
+        "--disable-blink-features=AutomationControlled",
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--disable-dev-shm-usage",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-extensions",
+        "--disable-plugins"
+      ]
+    },
+    "monitoring": {
+      "interval": 2,
+      "dom_monitoring": true,
+      "console_monitoring": true,
+      "network_monitoring": true,
+      "max_dom_size": 2000,
+      "max_console_entries": 100,
+      "max_network_events": 50
+    },
+    "logging": {
+      "level": "INFO",
+      "file_enabled": true,
+      "file_path": "logs/crawler.log",
+      "json_format": true,
+      "max_file_size": "10MB",
+      "backup_count": 5,
+      "console_output": true,
+      "structured_logging": true
+    },
+    "security": {
+      "max_payloads_per_type": 10,
+      "test_timeout": 10,
+      "retry_failed_tests": true,
+      "max_retries": 3,
+      "vulnerability_threshold": 5,
+      "risk_scoring": {
+        "critical": 9,
+        "high": 7,
+        "medium": 5,
+        "low": 3,
+        "info": 1
+      }
+    },
+    "network": {
+      "request_timeout": 30,
+      "max_redirects": 5,
+      "retry_strategy": {
+        "total": 3,
+        "backoff_factor": 0.3,
+        "status_forcelist": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ]
+      }
+    },
+    "performance": {
+      "max_concurrent_requests": 5,
+      "rate_limit": 1.0,
+      "memory_limit": "2GB",
+      "cpu_limit": 80
+    },
+    "output": {
+      "save_screenshots": false,
+      "screenshot_path": "screenshots/",
+      "save_reports": true,
+      "report_format": "json",
+      "report_path": "reports/",
+      "include_ai_analysis": true,
+      "include_technical_details": true
+    },
+    "privacy": {
+      "sanitize_logs": true,
+      "mask_sensitive_data": true,
+      "sensitive_patterns": [
+        "password",
+        "api_key",
+        "token",
+        "secret"
+      ],
+      "exclude_domains": [],
+      "respect_robots_txt": true
+    },
+    "advanced": {
+      "enable_ai_analysis": true,
+      "enable_visual_analysis": false,
+      "enable_behavioral_analysis": true,
+      "enable_threat_intelligence": false,
+      "enable_machine_learning": false,
+      "custom_payloads_file": null,
+      "custom_headers_file": null
+    }
+  }
+}

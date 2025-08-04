@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Scan Results - {{ scan_id }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .summary-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .summary-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .results-section {
+            margin-bottom: 30px;
+        }
+
+        .results-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .vulnerability-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .vulnerability-header {
+            padding: 15px 20px;
+            background: #f8d7da;
+            border-bottom: 1px solid #f5c6cb;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vulnerability-header.medium {
+            background: #fff3cd;
+            border-bottom-color: #ffeaa7;
+        }
+
+        .vulnerability-header.low {
+            background: #d1ecf1;
+            border-bottom-color: #bee5eb;
+        }
+
+        .vulnerability-header.info {
+            background: #e2e3e5;
+            border-bottom-color: #d1d3d4;
+        }
+
+        .vulnerability-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .vulnerability-content.active {
+            display: block;
+        }
+
+        .risk-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-critical { background: #dc3545; color: white; }
+        .risk-high { background: #fd7e14; color: white; }
+        .risk-medium { background: #ffc107; color: #212529; }
+        .risk-low { background: #28a745; color: white; }
+        .risk-info { background: #6c757d; color: white; }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .export-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .scan-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🛡️ Penetration Test Results</h1>
+                <p>Scan ID: {{ scan_id }}</p>
+            </div>
+            <div class="export-buttons">
+                <a href="/" class="btn btn-secondary">← Back to Scanner</a>
+                <a href="/api/export_results/{{ scan_id }}/json" class="btn">📄 Export JSON</a>
+                <a href="/api/export_results/{{ scan_id }}/html" class="btn">📊 Export HTML</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="loadingIndicator" class="loading">
+                <div class="spinner"></div>
+                <p>Loading scan results...</p>
+            </div>
+
+            <div id="resultsContainer" style="display: none;">
+                <!-- Scan Summary -->
+                <div class="scan-summary" id="scanSummary">
+                    <!-- Summary cards will be populated by JavaScript -->
+                </div>
+
+                <!-- Detailed Results -->
+                <div class="results-section">
+                    <h2>🔍 Detailed Findings</h2>
+                    <div id="vulnerabilitiesList">
+                        <!-- Vulnerabilities will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Raw Data -->
+                <div class="results-section">
+                    <h2>📊 Raw Scan Data</h2>
+                    <div class="code-block" id="rawData">
+                        <!-- Raw data will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorContainer" style="display: none;">
+                <div class="error">
+                    <h3>❌ Error Loading Results</h3>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scanId = "{{ scan_id }}";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadResults();
+        });
+
+        async function loadResults() {
+            try {
+                const response = await fetch(`/api/scan_results/${scanId}`);
+                
+                // Check if response is OK
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                // Check content type to ensure it's JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Server returned non-JSON response');
+                }
+                
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.results, data.scan_info);
+                } else {
+                    showError(data.error || 'Failed to load results');
+                }
+            } catch (error) {
+                console.error('Error loading results:', error);
+                if (error.message.includes('Unexpected token')) {
+                    showError('Server returned HTML instead of JSON. Please check server logs.');
+                } else {
+                    showError('Network error: ' + error.message);
+                }
+            }
+        }
+
+        function displayResults(results, scanInfo) {
+            document.getElementById('loadingIndicator').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+
+            // Display scan summary
+            displayScanSummary(results, scanInfo);
+
+            // Display vulnerabilities
+            displayVulnerabilities(results);
+
+            // Display raw data
+            displayRawData(results);
+        }
+
+        function displayScanSummary(results, scanInfo) {
+            const summaryContainer = document.getElementById('scanSummary');
+            const report = results.report || {};
+
+            // Calculate scan duration
+            let duration = 'Unknown';
+            if (scanInfo.start_time && scanInfo.end_time) {
+                const start = new Date(scanInfo.start_time);
+                const end = new Date(scanInfo.end_time);
+                const diffMs = end - start;
+                const diffMins = Math.round(diffMs / 60000);
+                duration = `${diffMins} minutes`;
+            }
+
+            const summaryCards = [
+                {
+                    title: '🎯 Target',
+                    value: scanInfo.target_url || 'Unknown'
+                },
+                {
+                    title: '⏱️ Duration',
+                    value: duration
+                },
+                {
+                    title: '🤖 AI Analysis',
+                    value: scanInfo.scan_options?.use_ai ? 
+                        `Enabled (${scanInfo.scan_options.ai_provider?.toUpperCase() || 'Unknown'})` : 
+                        'Disabled'
+                },
+                {
+                    title: '📊 Scan Depth',
+                    value: `Level ${scanInfo.scan_options?.scan_depth || 'Unknown'}`
+                },
+                {
+                    title: '✅ Status',
+                    value: results.success ? 'Completed Successfully' : 'Failed'
+                },
+                {
+                    title: '🔍 Total Findings',
+                    value: countFindings(report)
+                }
+            ];
+
+            summaryContainer.innerHTML = '';
+            summaryCards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'summary-card';
+                cardDiv.innerHTML = `
+                    <h3>${card.title}</h3>
+                    <p>${card.value}</p>
+                `;
+                summaryContainer.appendChild(cardDiv);
+            });
+        }
+
+        function displayVulnerabilities(results) {
+            const vulnerabilitiesContainer = document.getElementById('vulnerabilitiesList');
+            const report = results.report || {};
+
+            // Extract vulnerabilities from report
+            const vulnerabilities = extractVulnerabilities(report);
+
+            if (vulnerabilities.length === 0) {
+                vulnerabilitiesContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>🎉 No Critical Vulnerabilities Found</h3>
+                        <p>The scan completed successfully with no major security issues detected.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            vulnerabilitiesContainer.innerHTML = '';
+            vulnerabilities.forEach((vuln, index) => {
+                const vulnDiv = document.createElement('div');
+                vulnDiv.className = 'vulnerability-card';
+                
+                const riskClass = getRiskClass(vuln.severity);
+                
+                vulnDiv.innerHTML = `
+                    <div class="vulnerability-header ${riskClass}" onclick="toggleVulnerability(${index})">
+                        <div>
+                            <strong>${vuln.title}</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.8;">${vuln.url || 'General finding'}</p>
+                        </div>
+                        <span class="risk-badge risk-${riskClass}">${vuln.severity}</span>
+                    </div>
+                    <div class="vulnerability-content" id="vuln-content-${index}">
+                        <p><strong>Description:</strong> ${vuln.description}</p>
+                        ${vuln.payload ? `<p><strong>Payload:</strong></p><div class="code-block">${vuln.payload}</div>` : ''}
+                        ${vuln.recommendation ? `<p><strong>Recommendation:</strong> ${vuln.recommendation}</p>` : ''}
+                        ${vuln.details ? `<p><strong>Technical Details:</strong></p><div class="code-block">${JSON.stringify(vuln.details, null, 2)}</div>` : ''}
+                    </div>
+                `;
+                
+                vulnerabilitiesContainer.appendChild(vulnDiv);
+            });
+        }
+
+        function displayRawData(results) {
+            const rawDataContainer = document.getElementById('rawData');
+            rawDataContainer.textContent = JSON.stringify(results, null, 2);
+        }
+
+        function extractVulnerabilities(report) {
+            const vulnerabilities = [];
+            
+            // This is a simplified extraction - you might need to adapt based on your actual report structure
+            if (typeof report === 'object') {
+                // Look for common vulnerability patterns in the report
+                const reportStr = JSON.stringify(report);
+                
+                // Example extraction logic (adapt to your report format)
+                if (reportStr.includes('sql') || reportStr.includes('injection')) {
+                    vulnerabilities.push({
+                        title: 'Potential SQL Injection',
+                        severity: 'high',
+                        description: 'Possible SQL injection vulnerability detected',
+                        url: report.target_url || 'Unknown'
+                    });
+                }
+                
+                if (reportStr.includes('xss') || reportStr.includes('script')) {
+                    vulnerabilities.push({
+                        title: 'Potential XSS Vulnerability',
+                        severity: 'medium',
+                        description: 'Possible cross-site scripting vulnerability detected',
+                        url: report.target_url || 'Unknown'
+                    });
+                }
+                
+                // Add more extraction logic based on your report structure
+            }
+            
+            return vulnerabilities;
+        }
+
+        function countFindings(report) {
+            // Count total findings in the report
+            const reportStr = JSON.stringify(report);
+            let count = 0;
+            
+            // Simple counting logic - adapt to your needs
+            if (reportStr.includes('vulnerability') || reportStr.includes('security')) count++;
+            if (reportStr.includes('error') || reportStr.includes('warning')) count++;
+            
+            return count || 'N/A';
+        }
+
+        function getRiskClass(severity) {
+            const severityLower = (severity || 'info').toLowerCase();
+            if (severityLower.includes('critical')) return 'critical';
+            if (severityLower.includes('high')) return 'high';
+            if (severityLower.includes('medium')) return 'medium';
+            if (severityLower.includes('low')) return 'low';
+            return 'info';
+        }
+
+        function toggleVulnerability(index) {
+            const content = document.getElementById(`vuln-content-${index}`);
+            content.classList.toggle('active');
+        }
+
+        function showError(message) {
+            document.getElementById('loadingIndicator').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>

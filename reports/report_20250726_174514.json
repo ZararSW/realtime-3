@@ -1,0 +1,256 @@
+{
+  "target_url": "https://sw.muet.edu.pk",
+  "timestamp": "2025-07-26T17:45:14.451000",
+  "findings": [
+    {
+      "url": "https://sw.muet.edu.pk",
+      "title": "Department of Software Engineering",
+      "ai_analysis": {
+        "success": true,
+        "analysis": "The provided HTML source code for the Department of Software Engineering at MUET (https://sw.muet.edu.pk) reveals several potential security concerns:\n\n*   **Third-Party CDN Dependencies:** The code relies heavily on external CDNs for Bootstrap, Font Awesome, and potentially other JavaScript libraries. While CDNs provide performance benefits, they introduce a single point of failure. If a CDN is compromised, the website could be serving malicious code to its users.  Specifically, the integrity attributes (e.g., `integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\"`) are included, which mitigates some risk of CDN compromise by allowing the browser to verify the integrity of the downloaded files.\n*   **Relative Paths for CSS/Images:** The use of relative paths for CSS files (e.g., `css/header.css`) and images (e.g., `images/logo.png`) is generally fine, however, if the server is misconfigured, it can lead to issues like path traversal vulnerabilities if the server tries to resolve those file paths. This is a low-risk issue in most cases.\n*   **Index.php Link:** The navigation bar includes a link to `index.php`. This suggests the website is using PHP, and the presence of user inputs without proper sanitization in other parts of the application (not evident in the code snippet) could lead to vulnerabilities like SQL injection or remote code execution.  This can't be assessed from this code alone, but the presence of PHP warrants investigation.\n*   **Lack of Subresource Integrity (SRI) for Custom CSS:**  While the Bootstrap and Font Awesome links have SRI, the custom CSS files lack SRI.  This makes the site vulnerable to modification of the custom CSS files, which can alter the look of the website and even inject malicious scripts.\n*   **Missing Security Headers:** The HTML source code doesn't provide information about HTTP security headers. Headers like Content Security Policy (CSP), X-Frame-Options, and HTTP Strict Transport Security (HSTS) are essential for preventing various attacks.  This requires further investigation through HTTP header analysis of the live website. This is crucial for determining what kind of defenses are in place against attacks like XSS.\n*   **Deprecated HTML Tags (Potentially):** The code snippet is not complete, so further analysis is required on the rendered website and all files to confirm that deprecated HTML tags are not used, which may cause rendering issues or security concerns.\n*   **PHP application:** The site uses PHP which, if not hardened and patched, may introduce vulnerabilities. \n\nThe assessment is limited because only the HTML source code of the landing page is available. A full security audit requires examination of the server configuration, PHP code, database interactions, and client-side JavaScript.",
+        "risk_score": 5,
+        "recommendations": [
+          "Implement and configure HTTP security headers, including CSP, X-Frame-Options, and HSTS.",
+          "Ensure all external dependencies, including CDN-hosted libraries, have Subresource Integrity (SRI) attributes implemented.  Implement SRI for all CSS and JavaScript files.",
+          "Regularly update Bootstrap, Font Awesome, and all other libraries to the latest versions.",
+          "Thoroughly sanitize and validate all user inputs if the website has user-interactive features. Implement parameterized queries to prevent SQL injection.",
+          "Perform a full security audit of the PHP code to identify and address potential vulnerabilities, including SQL injection, remote code execution, and XSS.",
+          "Implement proper error handling and logging to prevent information leakage.",
+          "Configure the web server to prevent directory listing and path traversal attacks.",
+          "Implement a Web Application Firewall (WAF) to protect against common web attacks.",
+          "Establish a vulnerability disclosure program so potential security issues can be reported and addressed"
+        ],
+        "entities": [
+          "https://sw.muet.edu.pk",
+          "images/logo.png",
+          "css/header.css",
+          "css/main.css",
+          "css/footer.css",
+          "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
+          "https://use.fontawesome.com/releases/v5.5.0/css/all.css",
+          "index.php"
+        ],
+        "vulnerabilities": [
+          "Potential XSS (requires further analysis of JavaScript and PHP code)",
+          "Potential SQL injection (if user input is not sanitized, and database interactions are not parameterized, requires PHP code analysis)",
+          "Third-party CDN dependency risk (mitigated by SRI, but still present)",
+          "Missing HTTP security headers",
+          "Lack of Subresource Integrity (SRI) for custom CSS files",
+          "Potential path traversal (if server misconfigured and file paths are not correctly handled)"
+        ],
+        "confidence": 0.8,
+        "model_used": "gemini-2.0-flash",
+        "processing_time": 8.783575534820557,
+        "error_message": null
+      },
+      "technologies": [
+        "jQuery",
+        "PHP",
+        "Bootstrap"
+      ],
+      "links": {
+        "internal": [
+          "https://sw.muet.edu.pk/index.php",
+          "https://sw.muet.edu.pk/index.php",
+          "https://sw.muet.edu.pk/#",
+          "https://sw.muet.edu.pk/department.php",
+          "https://sw.muet.edu.pk/bsai_program_department.php",
+          "https://sw.muet.edu.pk/#",
+          "https://sw.muet.edu.pk/curriculum.php",
+          "https://sw.muet.edu.pk/syllabus.php",
+          "https://sw.muet.edu.pk/timetable.php",
+          "https://sw.muet.edu.pk/bs_curriculum.php",
+          "https://sw.muet.edu.pk/bs_syllabus.php",
+          "https://sw.muet.edu.pk/bs_timetable.php",
+          "https://sw.muet.edu.pk/mephdcourses.php",
+          "https://sw.muet.edu.pk/library.php",
+          "https://sw.muet.edu.pk/labexperiments.php",
+          "https://sw.muet.edu.pk/rubrics.php",
+          "https://sw.muet.edu.pk/surveyforms.php",
+          "https://sw.muet.edu.pk/downloads.php",
+          "https://sw.muet.edu.pk/#",
+          "https://sw.muet.edu.pk/researchlabs.php",
+          "https://sw.muet.edu.pk/publications.php",
+          "https://sw.muet.edu.pk/project.php",
+          "https://sw.muet.edu.pk/ieee.php",
+          "https://sw.muet.edu.pk/#",
+          "https://sw.muet.edu.pk/faculty.php",
+          "https://sw.muet.edu.pk/staff.php",
+          "https://sw.muet.edu.pk/alumni.php",
+          "https://sw.muet.edu.pk/committee.php",
+          "https://sw.muet.edu.pk/graduate_directory.php",
+          "https://sw.muet.edu.pk/contact.php",
+          "https://sw.muet.edu.pk/#carouselExampleIndicators",
+          "https://sw.muet.edu.pk/#carouselExampleIndicators",
+          "https://sw.muet.edu.pk/news/SWE%20-%20Newsletter%202022-2023.pdf",
+          "https://sw.muet.edu.pk/news/job%20ad.jpeg",
+          "https://sw.muet.edu.pk/news/SES%202021-22%20NEWSLETTER.pdf"
+        ],
+        "external": [
+          "https://www.facebook.com/SWDEPTMUET/",
+          "https://www.instagram.com/swemuet/",
+          "https://twitter.com/swe_muet"
+        ],
+        "suspicious": [
+          "mailto:swemuet@gmail.com"
+        ],
+        "admin": [
+          "mailto:chairman.sw@admin.muet.edu.pk"
+        ]
+      },
+      "timestamp": 365978.328
+    },
+    {
+      "javascript": {}
+    },
+    {
+      "hidden_parameters": []
+    }
+  ],
+  "vulnerabilities": [],
+  "ai_summaries": [
+    {
+      "success": true,
+      "analysis": "The AI analysis of the Department of Software Engineering website (https://sw.muet.edu.pk) highlights several potential security vulnerabilities. The reliance on third-party CDNs, while mitigated by SRI for some resources, still presents a single point of failure risk. A CDN compromise could lead to malicious code injection. The use of relative paths, while not inherently dangerous, could lead to path traversal issues with server misconfiguration, though the risk is relatively low. The presence of 'index.php' strongly suggests PHP usage and a potential attack surface, especially concerning SQL injection or remote code execution vulnerabilities if user input is not properly sanitized on the server-side. The missing SRI for custom CSS files is a more immediate concern, allowing for potential manipulation of the website's appearance or even malicious script injection through compromised CSS files. Finally, the absence of security headers like Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), and X-Frame-Options increases the attack surface, potentially allowing XSS attacks, clickjacking, and other browser-based exploits.",
+      "risk_score": 6,
+      "recommendations": [
+        "Implement Subresource Integrity (SRI) for all CSS and JavaScript files, including custom ones.",
+        "Implement robust input validation and sanitization on the server-side, particularly for any PHP scripts handling user input, to prevent SQL injection and remote code execution vulnerabilities.",
+        "Configure appropriate security headers like Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Frame-Options, and X-Content-Type-Options.",
+        "Regularly monitor the integrity of CDN-hosted resources and have a plan in place to quickly switch to alternative hosting if a CDN is compromised.",
+        "Conduct a thorough security audit and penetration testing of the website to identify and remediate any further vulnerabilities.",
+        "Review server configurations to prevent potential path traversal vulnerabilities related to the use of relative paths."
+      ],
+      "entities": [
+        "https://sw.muet.edu.pk",
+        "Bootstrap CDN",
+        "Font Awesome CDN",
+        "index.php"
+      ],
+      "vulnerabilities": [
+        "Potential Cross-Site Scripting (XSS) due to missing CSP and potential vulnerabilities in custom CSS.",
+        "Potential SQL Injection or Remote Code Execution (RCE) due to PHP usage without proper sanitization.",
+        "Third-Party CDN Compromise.",
+        "Potential Path Traversal (Low risk, depends on server configuration).",
+        "Clickjacking (mitigated by X-Frame-Options, which is missing).",
+        "Man-in-the-Middle attacks (mitigated by HSTS, which is missing).",
+        "CSS Injection (due to missing SRI for custom CSS)"
+      ],
+      "confidence": 0.85,
+      "model_used": "gemini-2.0-flash",
+      "processing_time": 3.987485885620117,
+      "error_message": null
+    }
+  ],
+  "config": {
+    "ai": {
+      "model": "gemini-2.0-flash",
+      "api_key_env": "GOOGLE_API_KEY",
+      "max_retries": 3,
+      "timeout": 30,
+      "context_window": 2000
+    },
+    "browser": {
+      "headless": false,
+      "stealth_mode": true,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "window_size": "1920x1080",
+      "page_load_timeout": 30,
+      "implicit_wait": 10,
+      "chrome_options": [
+        "--disable-blink-features=AutomationControlled",
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--disable-dev-shm-usage",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-extensions",
+        "--disable-plugins"
+      ]
+    },
+    "monitoring": {
+      "interval": 2,
+      "dom_monitoring": true,
+      "console_monitoring": true,
+      "network_monitoring": true,
+      "max_dom_size": 2000,
+      "max_console_entries": 100,
+      "max_network_events": 50
+    },
+    "logging": {
+      "level": "INFO",
+      "file_enabled": true,
+      "file_path": "logs/crawler.log",
+      "json_format": true,
+      "max_file_size": "10MB",
+      "backup_count": 5,
+      "console_output": true,
+      "structured_logging": true
+    },
+    "security": {
+      "max_payloads_per_type": 10,
+      "test_timeout": 10,
+      "retry_failed_tests": true,
+      "max_retries": 3,
+      "vulnerability_threshold": 5,
+      "risk_scoring": {
+        "critical": 9,
+        "high": 7,
+        "medium": 5,
+        "low": 3,
+        "info": 1
+      }
+    },
+    "network": {
+      "request_timeout": 30,
+      "max_redirects": 5,
+      "retry_strategy": {
+        "total": 3,
+        "backoff_factor": 0.3,
+        "status_forcelist": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ]
+      }
+    },
+    "performance": {
+      "max_concurrent_requests": 5,
+      "rate_limit": 1.0,
+      "memory_limit": "2GB",
+      "cpu_limit": 80
+    },
+    "output": {
+      "save_screenshots": false,
+      "screenshot_path": "screenshots/",
+      "save_reports": true,
+      "report_format": "json",
+      "report_path": "reports/",
+      "include_ai_analysis": true,
+      "include_technical_details": true
+    },
+    "privacy": {
+      "sanitize_logs": true,
+      "mask_sensitive_data": true,
+      "sensitive_patterns": [
+        "password",
+        "api_key",
+        "token",
+        "secret"
+      ],
+      "exclude_domains": [],
+      "respect_robots_txt": true
+    },
+    "advanced": {
+      "enable_ai_analysis": true,
+      "enable_visual_analysis": false,
+      "enable_behavioral_analysis": true,
+      "enable_threat_intelligence": false,
+      "enable_machine_learning": false,
+      "custom_payloads_file": null,
+      "custom_headers_file": null
+    }
+  }
+}
