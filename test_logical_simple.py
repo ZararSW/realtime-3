@@ -23,7 +23,7 @@ async def test_logical_flaw_simple():
     # Use Groq with your API key
     analyzer = AIAnalyzer(
         model="groq-llama-3.1-8b-instant", 
-        api_key="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"
+        api_key=os.getenv("GROQ_API_KEY", "test_key_placeholder")
     )
     
     if analyzer.client is None:

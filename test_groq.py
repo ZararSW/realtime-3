@@ -14,7 +14,7 @@ async def test_groq():
     # Initialize AI analyzer with Groq
     analyzer = AIAnalyzer(
         model="groq-llama", 
-        api_key="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"
+        api_key=os.getenv("GROQ_API_KEY", "test_key_placeholder")
     )
     
     # Test prompt

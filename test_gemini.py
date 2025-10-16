@@ -27,7 +27,7 @@ async def test_gemini():
     
     try:
         # Initialize with Gemini
-        analyzer = AIAnalyzer(model="gemini-pro", api_key="AIzaSyB4Zhiw2PdhROpFYa6tLtMG2c7tyXh492s")
+        analyzer = AIAnalyzer(model="gemini-pro", api_key=os.getenv("GOOGLE_API_KEY", "test_key_placeholder"))
         print("✅ Gemini analyzer initialized")
         
         # Create a test command result

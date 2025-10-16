@@ -34,7 +34,7 @@ async def test_xss_analysis():
             api_key = provider_config.get("api_key") or os.getenv("GOOGLE_API_KEY")
         else:
             model = "groq-llama-3.1-8b-instant"
-            api_key = provider_config.get("api_key", "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")
+            api_key = provider_config.get("api_key") or os.getenv("GROQ_API_KEY")
         
         print(f"🤖 AI Provider: {provider}")
         print(f"🧠 Model: {model}")
@@ -153,7 +153,7 @@ async def test_dom_xss_scenario():
             api_key = provider_config.get("api_key")
         else:
             model = "groq-llama-3.1-8b-instant"
-            api_key = "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"
+            api_key = os.getenv("GROQ_API_KEY", "test_key_placeholder")
         
         analyzer = AIAnalyzer(model=model, api_key=api_key)
         
@@ -242,7 +242,7 @@ async def test_attribute_xss_scenario():
             api_key = provider_config.get("api_key")
         else:
             model = "groq-llama-3.1-8b-instant"
-            api_key = "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"
+            api_key = os.getenv("GROQ_API_KEY", "test_key_placeholder")
         
         analyzer = AIAnalyzer(model=model, api_key=api_key)
         
