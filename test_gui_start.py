@@ -66,7 +66,8 @@ def test_export_functionality():
             os.remove(json_file)
             os.remove(html_file)
             print("🧹 Cleanup successful")
-        except:
+        except Exception as e:
+            print(f"⚠️ Cleanup failed: {e}")
             pass
             
         return True

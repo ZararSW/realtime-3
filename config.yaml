@@ -9,7 +9,8 @@ ai:
   # Provider-specific configurations
   groq:
     model: "llama-3.1-8b-instant"
-    api_key: "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"
+    api_key_env: "GROQ_API_KEY"  # Set this environment variable
+    # api_key: "your_groq_api_key_here"  # Or set directly (NOT RECOMMENDED)
     fallback_models: ["llama3-8b-8192", "gemma-7b-it", "llama3-groq-8b-8192-tool-use-preview"]
   
   gemini:

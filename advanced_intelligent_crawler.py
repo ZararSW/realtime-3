@@ -538,7 +538,8 @@ class AdvancedIntelligentCrawler:
             try:
                 result = json.loads(result_text)
                 return result
-            except:
+            except Exception as e:
+                print(f"⚠️ Failed to parse AI response as JSON: {e}")
                 return {
                     "analysis": result_text,
                     "risk_score": 5,
@@ -2349,7 +2350,8 @@ class AdvancedIntelligentCrawler:
                 import os
                 try:
                     os.unlink(temp_file_path)
-                except:
+                except Exception as e:
+                    print(f"⚠️ Failed to remove temp file: {e}")
                     pass
                     
         except Exception as e:
@@ -2708,7 +2710,8 @@ class AdvancedIntelligentCrawler:
                     alert = self.driver.switch_to.alert
                     alert.accept()
                     return True
-                except:
+                except Exception as e:
+                    print(f"⚠️ Alert handling failed: {e}")
                     pass
                 
                 # Check if payload is reflected
@@ -2820,7 +2823,8 @@ class AdvancedIntelligentCrawler:
                         'timestamp': datetime.now().isoformat(),
                         'confidence': 'high'
                     }
-                except:
+                except Exception as e:
+                    print(f"⚠️ Vulnerability detection failed: {e}")
                     pass
                     
             except Exception:
@@ -2983,7 +2987,8 @@ class AdvancedIntelligentCrawler:
                             'vulnerable_url': rest_users_url,
                             'description': 'WordPress REST API exposes user information'
                         }
-                except:
+                except Exception as e:
+                    print(f"⚠️ WordPress user enumeration check failed: {e}")
                     pass
                     
         except Exception:
@@ -3719,7 +3724,8 @@ class AdvancedIntelligentCrawler:
                                         'description': 'WordPress REST API exposes user information',
                                         'severity': 'medium'
                                     }
-                    except:
+                    except Exception as e:
+                        print(f"⚠️ REST API check failed: {e}")
                         pass
                         
             except Exception:
@@ -4185,12 +4191,14 @@ class AdvancedIntelligentCrawler:
             if hasattr(self, 'driver') and self.driver:
                 try:
                     self.driver.quit()
-                except:
+                except Exception as e:
+                    print(f"⚠️ Failed to quit driver: {e}")
                     pass
             if hasattr(self, 'session') and self.session:
                 try:
                     self.session.close()
-                except:
+                except Exception as e:
+                    print(f"⚠️ Failed to close session: {e}")
                     pass
 
     def _make_json_serializable(self, obj):

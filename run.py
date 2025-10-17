@@ -46,7 +46,8 @@ def handle_webdriver_error(driver, error, retry_count=3):
             time.sleep(1)
             # Reinitialize driver here
             return True
-        except:
+        except Exception as e:
+            print(f"Failed to restart browser: {e}")
             return False
     
     return False
