@@ -155,25 +155,27 @@ CI runs the same suite on Python 3.9 and 3.11 (see `.github/workflows/ci.yml`).
 ## 📁 Project Structure
 
 ```
-run.py                          # CLI entry point  (python run.py <url>  /  webscan <url>)
-advanced_intelligent_crawler.py # Main crawler + vulnerability-testing engine
-ai_policy.py                    # AI / rule-based payload + response analysis policy
-stagehand_integration.py        # Optional Stagehand AI browser automation
-report_generator.py             # Report generation helpers
-gui_app.py                      # Flask web UI (python run.py --gui)
-intelligent_terminal_ai/        # AI analyzer, config, logging, models package
-tests/                          # pytest suite
-pyproject.toml                  # Packaging, dependencies, console script, pytest config
+run.py                       # thin shim -> scanner.cli:main (keeps `python run.py <url>`)
+scanner/                     # the application package
+  cli.py                     # CLI entry point (also the `webscan` console command)
+  crawler.py                 # main crawler + vulnerability-testing engine
+  ai_policy.py               # AI / rule-based payload + response-analysis policy
+  stagehand_integration.py   # optional Stagehand AI browser automation
+  report_generator.py        # report generation helpers
+  gui_app.py                 # Flask web UI (python run.py --gui)
+  logging_config.py          # structured logging + secret-redacting SecurityFilter
+  error_handler.py           # retry/recovery decorators and error utilities
+  config_loader.py / config_validator.py / constants.py
+intelligent_terminal_ai/     # AI analyzer, config, logging, models package
+tests/                       # pytest suite
+pyproject.toml               # packaging, dependencies, console script, pytest config
 ```
 
-> Note: `src/core/` contains an earlier modular prototype that is **not** on the
-> active code path; the live scanner is `run.py` + `advanced_intelligent_crawler.py`.
-
 ## Extending
-- Add new payloads / detection logic in `advanced_intelligent_crawler.py` or `ai_policy.py`
+- Add new payloads / detection logic in `scanner/crawler.py` or `scanner/ai_policy.py`
 - Plug in new AI providers in `intelligent_terminal_ai/core/ai_analyzer.py`
-- Customize reporting in `report_generator.py`
-- Add tests under `tests/` (they may `import run` and the live modules directly)
+- Customize reporting in `scanner/report_generator.py`
+- Add tests under `tests/` (they import from the `scanner` package directly)
 
 ## Security & Privacy
 - All logs are sanitized for sensitive data

@@ -1,5 +1,5 @@
 """Smoke tests for the AI policy layer (rule-based / no-AI fallback)."""
-import ai_policy
+from scanner import ai_policy
 
 
 def test_enable_ai_flag_is_boolean():

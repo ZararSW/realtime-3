@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from run import (
+from scanner.cli import (
     extract_target_url,
     make_json_serializable,
     map_priority_to_severity,

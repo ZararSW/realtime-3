@@ -15,13 +15,13 @@ from werkzeug.serving import run_simple
 import threading
 import time
 
-# Add project root to path
-project_root = Path(__file__).parent
+# Repo root is one level up from this package; templates/ and reports/ live there.
+project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
 from intelligent_terminal_ai.core.ai_analyzer import AIAnalyzer
 from intelligent_terminal_ai.utils.config import config
-from advanced_intelligent_crawler import AdvancedIntelligentCrawler
+from .crawler import AdvancedIntelligentCrawler
 
 app = Flask(__name__)
 app.secret_key = 'pentest-gui-secret-key-2024'
@@ -247,7 +247,7 @@ def get_scan_results(scan_id):
 def load_historical_scan_results(scan_id):
     """Load scan results from historical reports directory"""
     try:
-        reports_dir = Path(__file__).parent / 'reports'
+        reports_dir = project_root / 'reports'
         
         # Look for any report files
         for report_file in reports_dir.glob('*.json'):
@@ -585,7 +585,7 @@ def main():
     print("=" * 50)
     
     # Create templates directory if it doesn't exist
-    templates_dir = Path(__file__).parent / 'templates'
+    templates_dir = project_root / 'templates'
     templates_dir.mkdir(exist_ok=True)
     
     # Run Flask app

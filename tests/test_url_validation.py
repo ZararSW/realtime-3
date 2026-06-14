@@ -1,7 +1,7 @@
 """Tests for run.validate_and_normalize_url — the CLI's first line of defense."""
 import pytest
 
-from run import validate_and_normalize_url
+from scanner.cli import validate_and_normalize_url
 
 
 @pytest.mark.parametrize(

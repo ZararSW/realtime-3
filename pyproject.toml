@@ -43,20 +43,14 @@ dev = [
 
 [project.scripts]
 # Installs a `webscan` command that runs the scanner CLI.
-webscan = "run:main"
+webscan = "scanner.cli:main"
 
 [tool.setuptools]
-py-modules = [
-    "run",
-    "advanced_intelligent_crawler",
-    "ai_policy",
-    "stagehand_integration",
-    "report_generator",
-    "gui_app",
-]
+# Keep the thin root run.py shim so `python run.py <url>` keeps working.
+py-modules = ["run"]
 
 [tool.setuptools.packages.find]
-include = ["intelligent_terminal_ai*"]
+include = ["scanner*", "intelligent_terminal_ai*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

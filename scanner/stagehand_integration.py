@@ -25,7 +25,7 @@ except ImportError:
     class StagehandConfig:
         def __init__(self, *args, **kwargs): pass
 
-from ai_policy import AIPolicy, ENABLE_AI
+from .ai_policy import AIPolicy, ENABLE_AI
 
 @dataclass
 class NavigationResult:

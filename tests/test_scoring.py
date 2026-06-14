@@ -1,7 +1,7 @@
 """Tests for the risk/CVSS scoring helpers in run.py."""
 import pytest
 
-from run import get_risk_level, calculate_cvss_score, extract_cvss_from_severity
+from scanner.cli import get_risk_level, calculate_cvss_score, extract_cvss_from_severity
 
 
 @pytest.mark.parametrize(

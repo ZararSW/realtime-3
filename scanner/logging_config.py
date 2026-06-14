@@ -9,7 +9,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Callable
 from datetime import datetime
 import traceback
 import re
@@ -46,9 +46,16 @@ class SecurityFilter(logging.Filter):
         return True
     
     def _sanitize_message(self, message: str) -> str:
-        """Sanitize sensitive information from message"""
+        """Sanitize sensitive information from message.
+
+        Replaces only the captured secret *value* with a placeholder while
+        keeping the surrounding text (e.g. the key name) intact. The previous
+        implementation echoed the secret value back, which leaked it.
+        """
         for pattern in self.compiled_patterns:
-            message = pattern.sub(r'\1=***REDACTED***', message)
+            message = pattern.sub(
+                lambda m: m.group(0).replace(m.group(1), "***REDACTED***"), message
+            )
         return message
 
 class StructuredFormatter(logging.Formatter):

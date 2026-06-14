@@ -24,7 +24,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException, NoS
 
 # Conditional AI imports - only load when needed
 try:
-    from ai_policy import AIPolicy, ENABLE_AI
+    from .ai_policy import AIPolicy, ENABLE_AI
     AI_POLICY_AVAILABLE = True
 except ImportError:
     AI_POLICY_AVAILABLE = False
@@ -32,7 +32,7 @@ except ImportError:
 
 # Conditional Stagehand integration
 try:
-    from stagehand_integration import StagehandWebCrawler, create_stagehand_crawler
+    from .stagehand_integration import StagehandWebCrawler, create_stagehand_crawler
     STAGEHAND_AVAILABLE = True
 except ImportError:
     STAGEHAND_AVAILABLE = False
