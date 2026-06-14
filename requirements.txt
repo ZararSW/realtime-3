@@ -1,11 +1,9 @@
-# Core dependencies (always required)
+# Core dependencies (always required — scanner runs in rule-based no-AI mode with these)
 requests>=2.31.0
 selenium>=4.15.0
 beautifulsoup4>=4.12.0
-asyncio>=3.4.3
 aiohttp>=3.9.0
-chromium-driver>=3.25.0
-webdriver-manager>=4.0.0
+webdriver-manager>=4.0.0   # manages chromedriver automatically; needs Chrome/Chromium installed
 psutil>=5.9.0
 rich>=13.7.0
 pydantic>=2.5.0
@@ -14,17 +12,19 @@ python-dotenv>=1.0.0
 flask>=2.3.0
 PyYAML>=6.0.0
 
-# Stagehand AI browser automation (optional but recommended for AI-enhanced testing)
-# Install separately with: npm install @browserbase/stagehand
-# Python wrapper: pip install stagehand-python (if available)
+# NOTE: do NOT add `asyncio` here — it is part of the Python 3 standard library.
+# The PyPI `asyncio` backport is for Python 2 / 3.3 and breaks modern interpreters.
 
-# AI dependencies (optional - only needed when --ai flag is used)
-# These can be commented out for no-AI deployments
+# Stagehand AI browser automation (optional, for AI-enhanced testing)
+# Install separately: npm install @browserbase/stagehand
+
+# AI providers (optional — only needed with the --ai flag).
+# Equivalent to: pip install ".[ai]"
 openai>=1.3.0
 anthropic>=0.7.0
 google-generativeai>=0.3.0
 groq>=0.4.0
 
-# Testing dependencies (optional)
+# Testing (optional). Equivalent to: pip install ".[dev]"
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
