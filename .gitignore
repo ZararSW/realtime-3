@@ -33,6 +33,10 @@ artifacts/
 .bench/
 *.log
 consent_log_*.txt
+# Generated reports written to the repo root (no real HTML lives at root; templates are in templates/)
+/*.html
+/*_report*.json
+/syfe*.json
 
 # ---- Editor / OS ----
 .vscode/
