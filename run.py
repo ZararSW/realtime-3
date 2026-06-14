@@ -11,6 +11,16 @@ from pathlib import Path
 import json
 import html  # for HTML-escaping JSON outputs
 from datetime import datetime
+from urllib.parse import urlparse
+
+# Ensure emoji/unicode output never crashes on Windows consoles (cp1252) or
+# piped stdout. Without this, the tool's many emoji prints raise
+# UnicodeEncodeError and abort mid-scan on Windows.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -52,17 +62,10 @@ def handle_webdriver_error(driver, error, retry_count=3):
     
     return False
 
-from intelligent_terminal_ai.main import IntelligentTerminalAI
 from intelligent_terminal_ai.utils.logger import setup_logger
 from intelligent_terminal_ai.utils.config import config
-from intelligent_terminal_ai.core.autonomous_pentester import AutonomousPenTester
 from intelligent_terminal_ai.core.ai_analyzer import AIAnalyzer
-from intelligent_terminal_ai.core.browser_automator import BrowserAutomator
-from intelligent_terminal_ai.core.terminal_executor import TerminalExecutor
 
-# Import the working visual pentest demo
-from visual_pentest_demo import VisualPenTest
-from intelligent_crawler import IntelligentWebCrawler
 from advanced_intelligent_crawler import AdvancedIntelligentCrawler
 
 # Import the professional report generator
@@ -70,6 +73,43 @@ from report_generator import ReportGenerator
 
 # Import AI Policy Layer for AI/No-AI mode switching
 import ai_policy
+
+
+def validate_and_normalize_url(url: str) -> str:
+    """Validate and normalize a target URL before scanning.
+
+    - Trims surrounding whitespace.
+    - Adds an ``http://`` scheme when the user passes a bare host (e.g. ``example.com``).
+    - Rejects empty input, unsupported schemes, and URLs missing a host.
+
+    Returns the normalized URL. Raises ``ValueError`` with a human-readable
+    message on invalid input so the CLI can fail fast with a clear error.
+    """
+    if not url or not url.strip():
+        raise ValueError("Target URL is empty")
+
+    candidate = url.strip()
+    # Treat a bare host (no scheme) as http:// rather than letting it fail
+    # downstream, but reject dangerous pseudo-schemes that lack "://"
+    # (e.g. javascript:, data:, file:) so they are never fed to the crawler.
+    if "://" not in candidate:
+        lowered = candidate.lower()
+        for bad_scheme in ("javascript:", "data:", "file:", "vbscript:"):
+            if lowered.startswith(bad_scheme):
+                raise ValueError(
+                    f"Unsupported URL scheme '{bad_scheme[:-1]}'; only http and https are supported"
+                )
+        candidate = "http://" + candidate
+
+    parsed = urlparse(candidate)
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError(
+            f"Unsupported URL scheme '{parsed.scheme}'; only http and https are supported"
+        )
+    if not parsed.netloc:
+        raise ValueError(f"Invalid URL '{url}': missing host")
+
+    return candidate
 
 
 # ... (existing code) ...
@@ -272,111 +312,6 @@ async def generate_pentest_report(crawler: AdvancedIntelligentCrawler, target_si
     
     print("=" * 75)
     print("✅ Security assessment completed!")
-
-
-async def interactive_pentest(logger):
-    """Run an interactive penetration testing session with enhanced performance."""
-    
-    # Test sites (known WordPress installations)
-    test_sites = [
-        {
-            'url': 'http://testphp.vulnweb.com/wordpress/',
-            'name': 'Vulnerable WordPress Test Site',
-            'description': 'Intentionally vulnerable WordPress for testing'
-        },
-        {
-            'url': 'https://wpexploit-labs.com/',
-            'name': 'WordPress Exploit Labs',
-            'description': 'WordPress security testing environment'
-        },
-        {
-            'url': 'https://sxi.io/common-wordpress-vulnerabilities/',
-            'name': 'WordPress Vulnerability Info Site',
-            'description': 'A blog post about WP vulnerabilities (good for crawling)'
-        },
-        {
-            'url': 'https://wordpress.org/',
-            'name': 'Official WordPress.org',
-            'description': 'The official WordPress project site'
-        }
-    ]
-    
-    print("🎯 AUTONOMOUS PENTESTING TOOL")
-    print("🛡️ An intelligent, human-like security scanner")
-    print("="*75)
-    
-    # Let user choose a site
-    print(f"\n🌐 Select a target site:")
-    for i, site in enumerate(test_sites, 1):
-        print(f"  {i}. {site['name']} ({site['url']})")
-    
-    print(f"  {len(test_sites) + 1}. Enter a custom URL")
-    
-    choice = input(f"Select an option (1-{len(test_sites) + 1}): ").strip()
-    
-    target_site = None
-    try:
-        choice_num = int(choice)
-        if 1 <= choice_num <= len(test_sites):
-            target_site = test_sites[choice_num - 1]
-        elif choice_num == len(test_sites) + 1:
-            custom_url = input("Enter the full URL to test: ").strip()
-            if not custom_url.startswith(('http://', 'https://')):
-                custom_url = f"https://{custom_url}"
-            target_site = {'url': custom_url, 'name': 'Custom Site', 'description': 'User-provided target'}
-    except ValueError:
-        pass
-
-    if not target_site:
-        print("Invalid choice. Exiting.")
-        return
-
-    # Select scan depth with performance considerations
-    print(f"\n📊 Select scan comprehensiveness:")
-    print(f"  1. WordPress Focus (Fast check for WordPress-specific issues) - ~2-3 minutes")
-    print(f"  2. Balanced Scan (Standard crawling and vulnerability testing) - ~5-7 minutes")
-    print(f"  3. Deep Security (Comprehensive testing, slower) - ~10-15 minutes")
-    
-    scan_depth = input("Enter choice (1-3, default 2): ").strip() or "2"
-    if scan_depth not in ['1', '2', '3']:
-        scan_depth = '2'
-
-    scan_type_map = {'1': 'WordPress Focus', '2': 'Balanced Scan', '3': 'Deep Security'}
-    
-    print(f"\n🎯 Selected Target: {target_site['name']}")
-    print(f"🌐 URL: {target_site['url']}")
-    print(f"📈 Scan Type: {scan_type_map.get(scan_depth, 'Unknown')}")
-    print("="*75)
-    
-    # Performance monitoring
-    start_time = time.time()
-    crawler = None
-    try:
-        logger.info("Initializing advanced intelligent crawler...")
-        # Pass the scan_depth to the crawler to control its behavior
-        crawler = AdvancedIntelligentCrawler()
-        await crawler.setup_advanced_browser()
-        
-        logger.info(f"Starting comprehensive scan for {target_site['url']}")
-        await crawler.comprehensive_crawl_and_test(target_site['url'])
-        
-        # Generate the final report
-        await generate_pentest_report(crawler, target_site, scan_depth)
-        
-        # Performance summary
-        elapsed_time = time.time() - start_time
-        print(f"\n⏱️ Scan completed in {elapsed_time:.1f} seconds")
-        
-    except KeyboardInterrupt:
-        logger.warning("\n⚠️ Scan interrupted by user.")
-    except Exception as e:
-        logger.error(f"\n❌ A critical error occurred during the scan: {e}")
-        import traceback
-        traceback.print_exc()
-    finally:
-        if crawler and crawler.driver:
-            await crawler.close()
-            logger.info("🔧 Browser and resources have been released.")
 
 
 def save_report_as_html(data: dict, filename: str = 'report.html', ai_enabled: bool = True):
@@ -1101,291 +1036,12 @@ def handle_output(report_data, output_format: str, output_file: str = None, ai_e
             print(json.dumps(report_data, indent=2))
 
 
-async def main():
-    """Main entry point with enhanced configuration management"""
-    parser = argparse.ArgumentParser(
-        description="Intelligent Terminal AI - Execute commands with AI analysis and self-correction"
-    )
-    
-    parser.add_argument(
-        "command",
-        nargs="?",
-        help="Command to execute (if not provided, starts interactive mode)"
-    )
-    
-    parser.add_argument(
-        "--url",
-        help="URL to test/analyze"
-    )
-    
-    parser.add_argument(
-        "--model",
-        default=config.get("ai", "model"),
-        help="AI model to use (gpt-4, claude-3-sonnet, gemini-pro, etc.)"
-    )
-    
-    parser.add_argument(
-        "--headless",
-        action="store_true",
-        default=config.get("browser", "headless"),
-        help="Run browser in headless mode"
-    )
-    
-    parser.add_argument(
-        "--max-iterations",
-        type=int,
-        default=config.get("session", "max_iterations"),
-        help="Maximum number of self-correction iterations"
-    )
-    
-    parser.add_argument(
-        "--log-level",
-        default=config.get("logging", "level"),
-        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-        help="Logging level"
-    )
-    
-    parser.add_argument(
-        "--api-test",
-        action="store_true",
-        help="Treat the URL as an API endpoint to test"
-    )
-    
-    parser.add_argument(
-        "--method",
-        default="GET",
-        help="HTTP method for API testing (default: GET)"
-    )
-    
-    parser.add_argument(
-        "--pentest",
-        action="store_true",
-        help="Perform autonomous penetration testing on the URL"
-    )
-    
-    parser.add_argument(
-        "--visual-pentest",
-        action="store_true",
-        help="Perform real-time visual penetration testing with browser feedback"
-    )
-    
-    parser.add_argument(
-        "--intelligent-crawl",
-        action="store_true", 
-        help="Perform intelligent web crawling and feature-based testing"
-    )
-    
-    parser.add_argument(
-        "--advanced-crawl",
-        action="store_true",
-        help="Perform advanced AI-powered intelligent crawling with comprehensive vulnerability testing"
-    )
-    
-    parser.add_argument(
-        "--depth",
-        type=int,
-        default=3,
-        help="Penetration testing depth (default: 3)"
-    )
-    
-    # Enhanced configuration options
-    parser.add_argument(
-        "--timeout",
-        type=int,
-        default=30,
-        help="Request timeout in seconds (default: 30)"
-    )
-    
-    parser.add_argument(
-        "--concurrent",
-        type=int,
-        default=5,
-        help="Number of concurrent requests (default: 5)"
-    )
-    
-    parser.add_argument(
-        "--retry-failed",
-        action="store_true",
-        default=True,
-        help="Retry failed requests (default: True)"
-    )
-    
-    parser.add_argument(
-        "--save-screenshots",
-        action="store_true",
-        help="Save screenshots during scanning"
-    )
-    
-    parser.add_argument(
-        "--output-format",
-        choices=["html", "json", "text", "console"],
-        default="console",
-        help="Output format for reports (default: console)"
-    )
-    
-    args = parser.parse_args()
-    
-    # Setup logging
-    logger = setup_logger(__name__, args.log_level)
-    
-    # Load environment variables for configuration
-    os.environ.setdefault('BROWSER_TIMEOUT', str(args.timeout))
-    os.environ.setdefault('CONCURRENT_REQUESTS', str(args.concurrent))
-    os.environ.setdefault('RETRY_FAILED', str(args.retry_failed))
-    os.environ.setdefault('SAVE_SCREENSHOTS', str(args.save_screenshots))
-    
-    # Handle visual pentest separately (doesn't need the full AI tool)
-    if args.url and args.visual_pentest:
-        logger.info("Starting visual autonomous penetration testing")
-        visual_pentester = VisualPenTest()
-        await visual_pentester.visual_pentest(args.url)
-        return
-    
-    # Handle intelligent crawling separately
-    if args.url and args.intelligent_crawl:
-        logger.info("Starting intelligent web crawling and testing")
-        crawler = IntelligentWebCrawler()  
-        await crawler.intelligent_crawl_and_test(args.url)
-        return
-    
-    # Handle advanced intelligent crawling
-    if args.url and args.advanced_crawl:
-        logger.info("Starting advanced AI-powered intelligent crawling")
-        advanced_crawler = AdvancedIntelligentCrawler()
-        await advanced_crawler.comprehensive_crawl_and_test(args.url)
-        return
-    
-    try:
-        # Initialize the AI tool for other operations
-        async with IntelligentTerminalAI(
-            ai_model=args.model,
-            headless_browser=args.headless,
-            log_level=args.log_level
-        ) as ai_tool:
-            
-            if args.command and args.url:
-                # Execute command and test URL
-                logger.info("Executing command with URL testing")
-                result = await ai_tool.execute_intelligent_command(
-                    args.command,
-                    target_url=args.url,
-                    max_iterations=args.max_iterations
-                )
-                print_result(result)
-                
-            elif args.command:
-                # Execute command only
-                logger.info("Executing command")
-                result = await ai_tool.execute_intelligent_command(
-                    args.command,
-                    max_iterations=args.max_iterations
-                )
-                print_result(result)
-                
-            elif args.url:
-                # Test URL/API or run pentest
-                if args.pentest:
-                    logger.info("Starting autonomous penetration testing")
-                    result = await ai_tool.autonomous_pentest(
-                        args.url,
-                        depth=args.depth
-                    )
-                    print_pentest_result(result)
-                elif args.api_test:
-                    logger.info("Testing API endpoint")
-                    result = await ai_tool.test_api_endpoint(
-                        args.url,
-                        method=args.method
-                    )
-                    print_result(result)
-                else:
-                    logger.info("Testing URL")
-                    result = await ai_tool.test_api_endpoint(args.url)
-                    print_result(result)
-                
-            else:
-                # Interactive pentest mode is the default
-                logger.info("Starting interactive pentest mode")
-                await interactive_pentest(logger)
-    
-    except KeyboardInterrupt:
-        logger.info("Interrupted by user")
-        sys.exit(0)
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        sys.exit(1)
+def main():
+    """CLI entry point for the Advanced Security Scanner.
 
-
-def print_result(result):
-    """Print analysis result in a formatted way"""
-    
-    print("\n" + "="*60)
-    print("INTELLIGENT TERMINAL AI - ANALYSIS RESULT")
-    print("="*60)
-    
-    status = "✅ SUCCESS" if result.success else "❌ FAILED"
-    print(f"Status: {status}")
-    print(f"Message: {result.message}")
-    
-    if hasattr(result, 'iterations_used') and result.iterations_used:
-        print(f"Iterations: {result.iterations_used}")
-    
-    if hasattr(result, 'final_command') and result.final_command:
-        print(f"Final Command: {result.final_command}")
-    
-    if result.suggestions:
-        print("\n💡 SUGGESTIONS:")
-        for i, suggestion in enumerate(result.suggestions, 1):
-            print(f"  {i}. {suggestion}")
-    
-    if hasattr(result, 'analysis') and result.analysis:
-        print(f"\n🔍 DETAILED ANALYSIS:")
-        print(f"  {result.analysis}")
-    
-    print("="*60)
-
-
-def print_pentest_result(result):
-    """Print pentest result in a formatted way"""
-    
-    print("\n" + "="*70)
-    print("🛡️  AUTONOMOUS PENETRATION TEST REPORT")
-    print("="*70)
-    
-    print(f"🎯 Target: {result.get('target', 'Unknown')}")
-    print(f"📊 Risk Score: {result.get('risk_score', 0)}/10")
-    
-    # Show phases completed
-    phases = result.get('phases', [])
-    print(f"\n📋 Phases Completed: {len(phases)}")
-    for i, phase in enumerate(phases, 1):
-        tests = len(phase.get('tests', []))
-        findings = len(phase.get('findings', []))
-        print(f"  {i}. {phase.get('name', 'Unknown Phase')} - {tests} tests, {findings} findings")
-    
-    # Show summary
-    summary = result.get('summary', '')
-    if summary:
-        print(f"\n🤖 AI ANALYSIS:")
-        print(f"  {summary}")
-    
-    # Show recommendations
-    recommendations = result.get('recommendations', [])
-    if recommendations:
-        print(f"\n💡 RECOMMENDATIONS:")
-        for i, rec in enumerate(recommendations[:5], 1):
-            print(f"  {i}. {rec}")
-    
-    # Show error if any
-    if 'error' in result:
-        print(f"\n❌ ERROR: {result['error']}")
-    
-    print("="*70)
-    print("📝 Full report saved to session history")
-    print("="*70)
-
-
-if __name__ == "__main__":
+    Parses arguments, validates the target, configures AI, runs the crawler,
+    writes the report, and exits with a status code reflecting the scan outcome.
+    """
     parser = argparse.ArgumentParser(description="Advanced Security Scanner - Comprehensive vulnerability testing with tree-like exploration")
     parser.add_argument("url", help="Target URL to test")
     parser.add_argument("--output", default="console", help="Output format: 'console' for terminal display, 'filename.html' for HTML report, 'filename.txt' for text report, 'filename.json' for JSON report")
@@ -1407,6 +1063,15 @@ if __name__ == "__main__":
     if args.ai and args.no_ai:
         print("❌ Error: Cannot specify both --ai and --no-ai flags")
         sys.exit(1)
+
+    # Validate and normalize the target URL up front so we fail fast with a
+    # clear message instead of crashing deep inside the crawler.
+    if not args.gui:
+        try:
+            args.url = validate_and_normalize_url(args.url)
+        except ValueError as e:
+            print(f"❌ Error: {e}")
+            sys.exit(2)
 
     # Override AI configuration if specified
     if args.ai:
@@ -1512,6 +1177,8 @@ if __name__ == "__main__":
             provider_config = config.get("ai", provider, {})
             
             # Determine model and API key based on provider
+            model = None
+            api_key = None
             if provider == "groq":
                 model = f"groq-{provider_config.get('model', 'llama-3.1-8b-instant')}"
                 api_key = provider_config.get("api_key") or os.getenv("GROQ_API_KEY")
@@ -1524,7 +1191,10 @@ if __name__ == "__main__":
             elif provider == "anthropic":
                 model = provider_config.get("model", "claude-3-sonnet-20240229")
                 api_key = provider_config.get("api_key") or os.getenv(provider_config.get("api_key_env", "ANTHROPIC_API_KEY"))
-            
+            else:
+                print(f"⚠️  Unknown AI provider '{provider}'; disabling AI analysis")
+                ai_enabled = False
+
             print(f"🤖 AI Provider: {provider.upper()}")
             print(f"🧠 AI Model: {model}")
             
@@ -1544,6 +1214,34 @@ if __name__ == "__main__":
         ai_enabled = False
         crawler = AdvancedIntelligentCrawler(log_to_file=True)
         
-    # Run the comprehensive crawler
-    report = asyncio.run(crawler.comprehensive_crawl_and_test(args.url))
-    handle_output(report, output_format, output_file, ai_enabled=ai_enabled)
+    # Run the comprehensive crawler with top-level error handling so the CLI
+    # always exits cleanly with a meaningful status code.
+    try:
+        report = asyncio.run(crawler.comprehensive_crawl_and_test(args.url))
+    except KeyboardInterrupt:
+        print("\n⚠️  Scan interrupted by user")
+        sys.exit(130)  # 128 + SIGINT, the conventional exit code for Ctrl-C
+    except Exception as e:
+        logger.error(f"Scan failed with an unexpected error: {e}", exc_info=True)
+        print(f"❌ Scan failed: {e}")
+        sys.exit(1)
+
+    try:
+        handle_output(report, output_format, output_file, ai_enabled=ai_enabled)
+    except Exception as e:
+        logger.error(f"Failed to write report output: {e}", exc_info=True)
+        print(f"❌ Failed to write report ({output_format}): {e}")
+        sys.exit(1)
+
+    # Map the crawler's reported status to a process exit code so callers
+    # (CI, scripts) can detect failed or interrupted scans.
+    status = (report or {}).get("status")
+    if status == "failed":
+        sys.exit(1)
+    elif status == "interrupted":
+        sys.exit(130)
+
+
+if __name__ == "__main__":
+    main()
+    sys.exit(0)

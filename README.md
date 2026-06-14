@@ -124,43 +124,60 @@ GOOGLE_API_KEY=your_google_api_key_here
 | Vulnerability Detection | Context-aware | AI-powered | Heuristic |
 | False Positives | Lowest | Low | Medium |
 
-## 🧪 Testing Your Setup
+## 📦 Install as a package (optional)
 
 ```bash
-# Test basic functionality
-python test_stagehand_integration.py --quick
+# Core + dev tooling, with a `webscan` console command
+pip install -e ".[dev]"
 
-# Full integration test
-python test_stagehand_integration.py
+# Add AI providers
+pip install -e ".[ai]"
 
-# Test against safe target
-python run.py --no-ai https://httpbin.org/forms/post
+# Then run from anywhere:
+webscan https://testphp.vulnweb.com/ --no-ai
 ```
+
+## 🧪 Running the Tests
+
+The project ships a pytest suite covering the URL validation, risk/CVSS
+scoring, report transforms, and the rule-based AI-policy fallback.
+
+```bash
+pip install -e ".[dev]"   # or: pip install pytest pytest-asyncio
+pytest -q
+
+# Quick smoke test against a safe, intentionally-vulnerable target
+python run.py --no-ai https://testphp.vulnweb.com/
+```
+
+CI runs the same suite on Python 3.9 and 3.11 (see `.github/workflows/ci.yml`).
 
 ## 📁 Project Structure
 
 ```
-src/
-  core/
-    config.py           # Configuration management
-    logger.py           # Structured, privacy-aware logging
-    ai_analyzer.py      # AI-powered analysis
-    browser_manager.py  # Stealth browser automation
-    network_monitor.py  # Real-time network monitoring
-    security_tester.py  # Automated vulnerability scanning
-    report_generator.py # Structured, AI-augmented reporting
-    crawler.py          # Main orchestrator
-  main.py               # CLI entry point
+run.py                          # CLI entry point  (python run.py <url>  /  webscan <url>)
+advanced_intelligent_crawler.py # Main crawler + vulnerability-testing engine
+ai_policy.py                    # AI / rule-based payload + response analysis policy
+stagehand_integration.py        # Optional Stagehand AI browser automation
+report_generator.py             # Report generation helpers
+gui_app.py                      # Flask web UI (python run.py --gui)
+intelligent_terminal_ai/        # AI analyzer, config, logging, models package
+tests/                          # pytest suite
+pyproject.toml                  # Packaging, dependencies, console script, pytest config
 ```
 
+> Note: `src/core/` contains an earlier modular prototype that is **not** on the
+> active code path; the live scanner is `run.py` + `advanced_intelligent_crawler.py`.
+
 ## Extending
-- Add new payloads or tests in `security_tester.py` or via config
-- Plug in new AI models in `ai_analyzer.py`
+- Add new payloads / detection logic in `advanced_intelligent_crawler.py` or `ai_policy.py`
+- Plug in new AI providers in `intelligent_terminal_ai/core/ai_analyzer.py`
 - Customize reporting in `report_generator.py`
+- Add tests under `tests/` (they may `import run` and the live modules directly)
 
 ## Security & Privacy
 - All logs are sanitized for sensitive data
-- API keys and secrets are loaded from environment/config
+- API keys and secrets are loaded from environment/config (never commit `.env`)
 - Reports and logs are privacy-aware by default
 
 ## License

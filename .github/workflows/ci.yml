@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package (core + dev extras)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Byte-compile the live scanner modules
+        run: |
+          python -m compileall -q \
+            run.py advanced_intelligent_crawler.py ai_policy.py \
+            stagehand_integration.py report_generator.py gui_app.py
+
+      - name: Verify the console entry point is importable
+        run: python -c "import run; assert callable(run.main)"
+
+      - name: Run tests
+        run: python -m pytest -q
