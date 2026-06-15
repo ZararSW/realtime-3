@@ -63,12 +63,19 @@ from datetime import datetime
 load_dotenv()
 
 class AdvancedIntelligentCrawler:
-    def __init__(self, log_to_file=False, log_file_path="crawler_live_log.jsonl", ai_analyzer=None):
-        """Initialize the advanced intelligent crawler with AI capabilities"""
+    def __init__(self, log_to_file=False, log_file_path="crawler_live_log.jsonl", ai_analyzer=None,
+                 enable_realtime_monitor=False):
+        """Initialize the advanced intelligent crawler with AI capabilities.
+
+        enable_realtime_monitor: run the background DOM/console/network monitor.
+            Off by default — it drives the same Selenium session concurrently with
+            the scan phases, which is not thread-safe and crashes the Chrome tab.
+        """
         self.target_url = None
         self.target_domain = None
         self.driver = None
         self.session = None
+        self.enable_realtime_monitor = enable_realtime_monitor
         
         # Advanced discovery tracking
         self.discovered_assets = {
@@ -4109,7 +4116,8 @@ class AdvancedIntelligentCrawler:
         
         capture_print(f"🎯 Target: {target_url}")
         capture_print(f"🚀 Starting comprehensive intelligent security testing...")
-        
+
+        monitor_task = None
         try:
             await self.setup_advanced_browser()
             
@@ -4121,9 +4129,12 @@ class AdvancedIntelligentCrawler:
                 comprehensive_report["phases"][-1]["end_time"] = datetime.now().isoformat()
                 comprehensive_report["phases"][-1]["findings"] = dict(self.discovered_assets)
             
-            # Start real-time monitoring in the background
-            monitor_task = asyncio.create_task(self.realtime_monitor_and_analyze())
-            
+            # Optional real-time monitoring in the background. Disabled by default:
+            # it drives the same Selenium session concurrently with the scan phases,
+            # which crashes the Chrome tab ("tab crashed") and fails the scan.
+            if self.enable_realtime_monitor:
+                monitor_task = asyncio.create_task(self.realtime_monitor_and_analyze())
+
             # Phase 1: Advanced Discovery
             capture_print("\n📡 Phase 1: Advanced Discovery")
             comprehensive_report["phases"].append({"name": "Advanced Discovery", "start_time": datetime.now().isoformat()})
@@ -4200,6 +4211,9 @@ class AdvancedIntelligentCrawler:
             comprehensive_report["status"] = "failed"
             return comprehensive_report
         finally:
+            # Stop the background monitor (if it was started) before tearing down.
+            if monitor_task is not None:
+                monitor_task.cancel()
             if hasattr(self, 'driver') and self.driver:
                 try:
                     self.driver.quit()
