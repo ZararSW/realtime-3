@@ -141,6 +141,9 @@ class StagehandWebCrawler:
         
         try:
             options = Options()
+            # Return once the DOM is ready rather than waiting for every sub-resource;
+            # avoids hanging at "data:," when a page asset never finishes loading.
+            options.page_load_strategy = "eager"
             if self.headless:
                 options.add_argument("--headless")
             options.add_argument("--no-sandbox")
@@ -149,6 +152,14 @@ class StagehandWebCrawler:
             options.add_argument("--window-size=1920,1080")
             
             self.selenium_driver = webdriver.Chrome(options=options)
+
+            # Prevent driver.get() from hanging forever on slow/unreachable pages
+            # (otherwise the browser sits at "data:," and Phase 0 stalls with no error).
+            import os
+            page_load_timeout = int(os.environ.get("BROWSER_TIMEOUT", "30"))
+            self.selenium_driver.set_page_load_timeout(page_load_timeout)
+            self.selenium_driver.set_script_timeout(page_load_timeout)
+
             self.logger.info("Selenium fallback initialized")
             
         except Exception as e:

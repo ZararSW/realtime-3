@@ -430,7 +430,12 @@ class AdvancedIntelligentCrawler:
         
         # Setup standard Selenium browser
         chrome_options = Options()
-        
+
+        # Return once the DOM is ready instead of blocking until every sub-resource
+        # (images/ads/trackers) loads — a single hanging asset would otherwise stall
+        # navigation indefinitely even when the site itself is reachable.
+        chrome_options.page_load_strategy = "eager"
+
         # Stealth settings
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -451,7 +456,14 @@ class AdvancedIntelligentCrawler:
         chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         
         self.driver = webdriver.Chrome(options=chrome_options)
-        
+
+        # Prevent navigation from hanging forever on slow/unreachable pages.
+        # Without this, driver.get() blocks indefinitely (browser stuck at "data:,")
+        # and the whole scan stalls with no error. Honors --timeout via BROWSER_TIMEOUT.
+        page_load_timeout = int(os.environ.get("BROWSER_TIMEOUT", "30"))
+        self.driver.set_page_load_timeout(page_load_timeout)
+        self.driver.set_script_timeout(page_load_timeout)
+
         # Execute stealth scripts
         self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]})")
